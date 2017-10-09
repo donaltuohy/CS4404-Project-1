@@ -1,4 +1,5 @@
 # CS4404-Project-1
+This is the branch for task 1 which Xin will work on.
 
 Software
 - Python Version 3.6
