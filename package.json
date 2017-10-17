@@ -1,0 +1,27 @@
+{
+  "name": "cs4404-project1-task2-js",
+  "version": "1.0.0",
+  "description": "This is the branch for task 2 which Stefano and Donal will work on.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefano-lupo/CS4404-Project-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefano-lupo/CS4404-Project-1/issues"
+  },
+  "homepage": "https://github.com/stefano-lupo/CS4404-Project-1#readme",
+  "dependencies": {
+    "csvtojson": "^1.1.9",
+    "highcharts": "^6.0.1",
+    "ml-regression": "^4.4.2"
+  }
+}
