@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js; xdg-open output.png"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,10 @@
   "dependencies": {
     "csvtojson": "^1.1.9",
     "highcharts": "^6.0.1",
-    "ml-regression": "^4.4.2"
+    "ml-matrix": "^5.0.1",
+    "ml-regression": "^4.4.2",
+    "ml-regression-base": "^1.2.0",
+    "ml-regression-multivariate-linear": "^1.0.1",
+    "plotter": "^0.5.0"
   }
 }
