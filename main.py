@@ -14,13 +14,13 @@ from sklearn.datasets import load_boston
 def featureNormalize(dataset):
     mu = np.mean(dataset,axis=0)
     sigma = np.std(dataset,axis=0)
-    return (dataset - mu)/sigma
+    return (dataset)/sigma
 
 
 
 # Read in the data
 houseData = np.recfromcsv('houses_10k.csv', delimiter=',', filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ')
-houseData = houseData[:100]
+houseData = houseData[:1000]
 numInstances = len(houseData)
 
 
@@ -91,3 +91,9 @@ weights = np.matrix(sess.run(W))
 print("MSE: %.4f" % sess.run(mse))
 print("Weights: ", weights)
 
+
+plt.plot(testX[:,1], testY, 'ro')
+plt.plot(testX[:,1], pred_y, 'bx')
+plt.xlabel("Square Footage")
+plt.ylabel("Price")
+plt.show()
