@@ -1,3 +1,6 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
 import tensorflow as tf
 # NumPy is often used to load, manipulate and preprocess data.
 import numpy as np
@@ -6,6 +9,13 @@ import matplotlib.pyplot as plt
 from numpy import genfromtxt
 
 from sklearn.datasets import load_boston
+
+
+def featureNormalize(dataset):
+    mu = np.mean(dataset,axis=0)
+    sigma = np.std(dataset,axis=0)
+    return (dataset - mu)/sigma
+
 
 
 # Read in the data
@@ -21,11 +31,11 @@ numTrainInstances = len(trainData)
 numTestInstances = len(testData)
 
 
-trainSqft = trainData['sqft_living']
-trainPrices = trainData['price']
+trainSqft = featureNormalize(trainData['sqft_living'])
+trainPrices = featureNormalize(trainData['price'])
 
-testSqft = testData['sqft_living']
-testPrices = testData['price']
+testSqft = featureNormalize(testData['sqft_living'])
+testPrices = featureNormalize(testData['price'])
 
 # Create Design Matrix X [[1...1][sqft1..sqftn]] as columns
 trainX = np.column_stack((np.ones(numTrainInstances), trainSqft))
@@ -39,18 +49,9 @@ testY = np.transpose(np.matrix(testPrices))
 print("trainX dimensions: ", trainX.shape, ", trainY Dimensions: ", trainY.shape)
 print("testX dimensions: ", testX.shape, ", testY Dimensions: ", testY.shape)
 
-# Plot the train data
-# fig = plt.figure()
-# plt.plot(trainSqft, trainPrices, 'ro')
-# plt.xlabel('Sqft Living')
-# plt.ylabel('Prices')
-# plt.show()
 
-
-
-
-learning_rate = 0.01
-training_epochs = 1000
+learning_rate = 0.05
+training_epochs = 20
 cost_history = np.empty(shape=[1],dtype=float)
 
 
@@ -73,15 +74,20 @@ sess.run(init)
 # Train
 for epoch in range(training_epochs):
     sess.run(training_step,feed_dict={X:trainX,Y:trainY})
-    # cost_history = np.append(cost_history, sess.run(cost,feed_dict={X: trainX,Y: trainY}))
-    # print(sess.run(cost,feed_dict={X: trainX,Y: trainY}))
+    cost_history = np.append(cost_history, sess.run(cost,feed_dict={X: trainX,Y: trainY}))
+
 
 # Plot the cost function over time
-plt.plot(range(len(cost_history)), cost_history)
-plt.axis([0,training_epochs,0,20000000])
-plt.show()
+# plt.plot(range(len(cost_history)), cost_history, 'b+')
+# plt.xlabel("Epoch #")
+# plt.ylabel("Cost function")
+# plt.axis([0,training_epochs,0,np.max(cost_history) + (0.1*np.max(cost_history))])
+# plt.show()
 
 
 pred_y = sess.run(y_, feed_dict={X: testX})
 mse = tf.reduce_mean(tf.square(pred_y - testY))
+weights = np.matrix(sess.run(W))
 print("MSE: %.4f" % sess.run(mse))
+print("Weights: ", weights)
+
