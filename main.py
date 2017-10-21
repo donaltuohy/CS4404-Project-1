@@ -7,15 +7,10 @@ import matplotlib.pyplot as plt
 from pandas import *
 from sklearn.preprocessing import scale
 
-# CONSTANTS
-FILE_NAME = "SUM_10k_without_noise.csv"
+# Load data from config file (see config.py)
+from config import TRAINING_PARAMS, ACTIVE_DATASET
 
-# Training Parameters
-NORMALIZE_METHOD = "MINMAX"
-DESIRED_NUM_INSTANCES = 10000
-SPLIT_METHOD = "70/30"
-LEARNING_RATE = 0.1
-TRAINING_EPOCHS = 100
+
 
 
 # Prints Matrices in a nicer way
@@ -24,8 +19,8 @@ def printM(dataset):
 
 # Read's data from CSV File
 def readData():
-    csvData = np.recfromcsv(FILE_NAME, delimiter=';', filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ')
-    numInstances = DESIRED_NUM_INSTANCES or len(csvData)
+    csvData = np.recfromcsv(ACTIVE_DATASET['FILE_NAME'], delimiter=';', filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ')
+    numInstances = TRAINING_PARAMS['DESIRED_NUM_INSTANCES'] or len(csvData)
     csvData = csvData[:numInstances]
     return csvData
 
@@ -60,8 +55,8 @@ def createLabelVector(dataset, labelName):
 
 # Splits data according to chosen split method
 def splitData(X, y):
-    if(SPLIT_METHOD == "70/30"):
-        numTrainInstances = round(DESIRED_NUM_INSTANCES*0.7)
+    if(TRAINING_PARAMS['SPLIT_METHOD'] == "70/30"):
+        numTrainInstances = round(len(X)*0.7)
         xTrain = X[:numTrainInstances, :]
         yTrain = y[:numTrainInstances]
         xTest = X[numTrainInstances:]
@@ -72,8 +67,9 @@ def splitData(X, y):
 
 # Normalizes features to Standard Normal Variable or maps them over [0,1] range
 def featureNormalize(dataset):
-    return scale(dataset)
-    if(NORMALIZE_METHOD == "MINMAX"):
+    if(TRAINING_PARAMS['NORMALIZE_METHOD']):
+        return scale(dataset)
+    elif(NORMALIZE_METHOD == "MINMAX"):
         print("Using min-max normalization")
         mins = np.amin(dataset, axis=0)
         maxs = np.amax(dataset, axis=0)
@@ -87,8 +83,8 @@ def featureNormalize(dataset):
 
 
 data = readData()
-X = createDesignMatrix(data, ["Instance", "Target", "Target Class"])
-y = createLabelVector(data, "Target")
+X = createDesignMatrix(data, ACTIVE_DATASET['OMITTED_FEATURES'])
+y = createLabelVector(data, ACTIVE_DATASET['LABEL'])
 
 X = featureNormalize(X)
 y = featureNormalize(y)
@@ -111,22 +107,20 @@ cost_history = np.empty(shape=[1],dtype=float)
 
 
 # Specify Linear Regression method
-init = tf.initialize_all_variables()
+init = tf.global_variables_initializer()
 y_ = tf.matmul(X, W)
 cost = tf.reduce_mean(tf.square(Y-y_))
-training_step = tf.train.GradientDescentOptimizer(LEARNING_RATE).minimize(cost)
+training_step = tf.train.GradientDescentOptimizer(TRAINING_PARAMS['LEARNING_RATE']).minimize(cost)
 
 # Run the session
 sess = tf.Session()
 sess.run(init)
 
 # Train
-for epoch in range(TRAINING_EPOCHS):
+for epoch in range(TRAINING_PARAMS['TRAINING_EPOCHS']):
     sess.run(training_step,feed_dict={X:xTrain,Y:yTrain})
     cost_history = np.append(cost_history, sess.run(cost,feed_dict={X: xTrain,Y: yTrain}))
 
-
-print(cost_history)
 
 ###########################################
 ####         Evaluation             #######
@@ -135,7 +129,7 @@ print(cost_history)
 plt.plot(range(len(cost_history)), cost_history, 'b+')
 plt.xlabel("Epoch #")
 plt.ylabel("Cost function")
-plt.axis([0,TRAINING_EPOCHS,0,np.max(cost_history) + (0.1*np.max(cost_history))])
+plt.axis([0,TRAINING_PARAMS['TRAINING_EPOCHS'],0,np.max(cost_history) + (0.1*np.max(cost_history))])
 plt.show()
 
 # Predict Y Values for given test values
@@ -160,7 +154,7 @@ print("Weights: ", weights)
 ## Multi feature LR Plot
 plt.plot(pred_y, yTest, 'ro')
 
-if(NORMALIZE_METHOD == "MINMAX"):
+if((TRAINING_PARAMS['NORMALIZE_METHOD'] == "MINMAX") or(TRAINING_PARAMS['NORMALIZE_METHOD'] == "SCALE")):
     plt.plot([0, 1, 2])
     plt.axis([0, 1.5, 0, 1.5])
 else:
