@@ -8,25 +8,6 @@ from numpy import genfromtxt
 from sklearn.datasets import load_boston
 
 
-# # Read in the data
-# # my_data = np.genfromtxt('houses_10k.csv', delimiter=',', dtype=None)
-# houseData = np.recfromcsv('houses_10k.csv', delimiter=',', filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ')
-#
-# houseData = houseData[:100]
-#
-# numInstances = len(houseData)
-#
-# trainData = houseData[:round(numInstances/2)]
-# testData =  houseData[round(numInstances/2):]
-
-# plot.plot(testData['sqft_living'], testData['price'], 'ro')
-# plot.show()
-
-
-
-
-
-
 
 def read_dataset(filePath,delimiter=','):
   return genfromtxt(filePath, delimiter=delimiter)
