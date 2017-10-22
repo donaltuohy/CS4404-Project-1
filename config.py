@@ -6,7 +6,7 @@ TRAINING_PARAMS = dict(
     TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
 )
 
-
+# Extract the data.zip folder to the working directory (same as this file) - should be automated
 # Specify a list of features using the FEATURES field,
 # If these features are to be ommited then set OMIT_FEATURES to True
 # If they are to be the features used for the inputs, set OMIT_FEATURES to False
@@ -38,4 +38,12 @@ SUM_10K_WITHOUT_NOISE = dict(
     LABEL = "Target"
 )
 
-ACTIVE_DATASET = HOUSE_DATA
+TEST_CLASSIFICATION_DATA = dict(
+    FILE_NAME = "test_classification.csv",
+    DELIMETER = ",",
+    FEATURES = ["x", "y"],
+    OMIT_FEATURES = False,
+    LABEL = "class"   
+)
+
+ACTIVE_DATASET = TEST_CLASSIFICATION_DATA
