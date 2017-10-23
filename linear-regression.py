@@ -37,7 +37,7 @@ yTest = splitData(x,y)[3]
 
 import matplotlib.pyplot as plt
 from sklearn import datasets, linear_model
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error,mean_absolute_error, r2_score
 
 # Create linear regression object
 regr = linear_model.LinearRegression()
@@ -51,16 +51,19 @@ yPrediction = regr.predict(xTest)
 # The coefficients
 print('Coefficients: \n', regr.coef_)
 # The mean squared error
-print("Mean squared error: %.2f"
-      % mean_squared_error(yTest, yPrediction))
+print("Mean Squared Error: %.2f" % mean_squared_error(yTest, yPrediction))
+print("Mean Absolute Error: %.2f" % mean_absolute_error(yTest, yPrediction))
+
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % r2_score(yTest, yPrediction))
 
 # Plot outputs
 #plt.plot(xTest[:,1], yTest, "ro" )
 #plt.plot(xTest[:,1], yPrediction, "bo")
-plt.plot(yTest, yPrediction, "bo")
+plt.plot(yTest, yPrediction, "ro")
 
+plt. xlabel("Actual Value")
+plt. ylabel("Predicted Value")
 plt.xticks(())
 plt.yticks(())
 

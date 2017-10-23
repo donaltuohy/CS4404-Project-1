@@ -65,4 +65,4 @@ HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePric
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
 
-ACTIVE_DATASET = HOUSE_DATA
+ACTIVE_DATASET = SUM_WITH_NOISE
