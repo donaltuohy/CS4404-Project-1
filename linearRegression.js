@@ -4,14 +4,119 @@ const SLR = ml.SLR; // Simple Linear Regression
 
 const MLR = require( 'ml-regression-multivariate-linear');
 
-// const x = [[0, 0], [1, 2], [2, 3], [3, 4]];
-// // Y0 = X0 * 2, Y1 = X1 * 2, Y2 = X0 + X1
-// const y = [[0, 0, 0], [2, 4, 3], [4, 6, 5], [6, 8, 7]];
-// const mlr = new MLR(x, y);
-// console.log(mlr.predict([3, 3]));
-// // [6, 6, 6]
 
 
+// Setup Globals
+const testFilePath = 'test.csv';
+const filePath = "sum_10k_without_noise.csv";
+const readline = require('readline'); 
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+
+let readFromCsv = new Promise(function (resolve, reject) {
+  let csvData = [];
+  csv()
+  .fromFile(filePath)
+  .on('json', (jsonObj) => {
+    csvData.push(jsonObj);
+  })
+  .on('done', () => {
+    console.log("Done");
+    // console.log(intermediateData);
+    resolve(csvData);
+  })
+  .on('error', (err) => {
+    reject(err);
+  });
+});
+
+
+
+function createDesignMatrix(features, csvData) {
+  let designMatrix = [[]];
+  csvData.forEach((row) => {
+    let newRow = [];
+    Object.keys(row).map((key,index) => {
+      console.log(features);
+      console.log(key);
+        if(features.includes(key)) {
+          console.log(key)
+          newRow.push(row.key)
+        }
+    });
+    designMatrix.push(newRow);
+  });
+  return designMatrix
+}
+
+function doRegression() {
+  const mlr = new MLR(X, y);
+  console.log(mlr.toJSON())
+  console.log(mlr.predict([1, 2, 3]));
+
+}
+
+
+
+
+
+// Main
+readFromCsv.then((readData) => {
+  const X = createDesignMatrix(["x1", "x2", "x3"], readData)
+  console.log(X);
+}).catch((err) => {
+    console.log(err);
+});
+
+
+// let csvData = readCSV(testFilePath);
+// let X = createDesignMatrix(["x1", "x2", "x3"], csvData);
+// console.log(X);
+
+
+
+
+
+
+
+
+
+
+
+
+// Basic Linear Regression
+// let inputs = [1, 2, 3, 4, 5];
+// let outputs = [10, 20, 30, 40, 50];
+// let regression = new SLR(inputs, outputs);
+// console.log(regression.toString(3));
+
+
+
+
+ 
+// const x = [
+//   [0, 0], 
+//   [1, 2], 
+//   [2, 3], 
+//   [3, 4]
+// ];
+
+// // Y = 5 + x1 + x2
+// const y = [[0], [8], [10], [12]];
+
+
+
+
+
+
+
+
+
+
+/*
 const csvFilePath = 'kc_house_data.csv'; // Data
 let csvData = [], // parsed Data
   X = [[]], // Input
@@ -44,12 +149,7 @@ function performRegression() {
   predictOutput();
 }
 
-function dressData() {
-  csvData.forEach((row) => {
-    X.push([parseFloat(row.sqft_living)]);
-    y.push([parseFloat(row.price)]);
-  });
-}
+
 
 
 function predictOutput() {
@@ -58,3 +158,5 @@ function predictOutput() {
     predictOutput();
   });
 }
+
+*/
