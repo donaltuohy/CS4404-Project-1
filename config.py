@@ -17,7 +17,7 @@ SUM_WITH_NOISE = dict(
     DELIMETER = ";",
     FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Noisy Target Class"
+    LABEL = "Noisy Target"
 )
 
 # Dataset 2 - House Data
@@ -60,10 +60,14 @@ TEST_CLASSIFICATION_DATA = dict(
 ###########################################
 ####                 KNN            #######
 ###########################################
-HOUSE_DATA_KNN = HOUSE_DATA
+SUM_WITH_NOISE_KNN = dict(SUM_WITH_NOISE)
+SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target Class"
+
+
+HOUSE_DATA_KNN = dict(HOUSE_DATA)
 HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
 
-ACTIVE_DATASET = HOUSE_DATA_KNN
+ACTIVE_DATASET = SUM_WITH_NOISE_KNN
 
