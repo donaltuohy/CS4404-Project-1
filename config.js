@@ -1,7 +1,7 @@
 const TRAINING_PARAMS = {
     NORMALIZE_METHOD: "ZSCORE",             // How features should be normalized
-    DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (None uses all instances)
-    SPLIT_METHOD: "70/30",                  // One of "70/30" or "10Fold"
+    DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (null uses all instances)
+    SPLIT_METHOD: "70/30",                  // One of "70/30" or "10Fold".
     LEARNING_RATE: 0.1,                     // Stepsize for gradient descent
     TRAINING_EPOCHS: 100                    // Number of iterations of gradient descent training
 };
@@ -42,7 +42,16 @@ const LINEAR_REGRESSION_DATASETS = {
         LABEL: "Target"
     },
 
-    // Dataset 4 - Test
+    // Dataset 4 - 10k of SUM without noise (for faster debugging)
+    SUM_10K_WITH_NOISE: {
+        FILE_NAME: "sum_10k_with_noise.csv",
+        DELIMETER: ",",
+        FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
+        OMIT_FEATURES: true,
+        LABEL: "Noisy Target"
+    },
+
+    // Dataset 5 - Test
     TEST_LINEAR_REGRESSION_DATA: {
         FILE_NAME: "test.csv",
         DELIMETER: ",",
@@ -52,7 +61,7 @@ const LINEAR_REGRESSION_DATASETS = {
     }
 };
 
-const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['SUM_WITH_NOISE'];
+const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['SUM_10K_WITH_NOISE'];
 
 
 
