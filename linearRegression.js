@@ -1,31 +1,21 @@
-const ml = require('ml-regression');
+const CONFIG = require('./config.js');
 const csv = require('csvtojson');
-const SLR = ml.SLR; // Simple Linear Regression
-
+// const SLR = ml.SLR; // Simple Linear Regression
 const MLR = require( 'ml-regression-multivariate-linear');
 
 
-
-// Setup Globals
-const testFilePath = 'test.csv';
-const filePath = "sum_10k_without_noise.csv";
-const readline = require('readline'); 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
+const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
 
 let readFromCsv = new Promise(function (resolve, reject) {
   let csvData = [];
-  csv()
-  .fromFile(filePath)
+  csv({delimiter: DATASET.DELIMETER})
+  .fromFile(DATASET.FILE_NAME)
   .on('json', (jsonObj) => {
     csvData.push(jsonObj);
   })
   .on('done', () => {
-    console.log("Done");
-    // console.log(intermediateData);
     resolve(csvData);
   })
   .on('error', (err) => {
@@ -34,29 +24,53 @@ let readFromCsv = new Promise(function (resolve, reject) {
 });
 
 
+function getSelectedFeatures(csvData) {
+    const allFeatures = Object.keys(csvData[0]);
+    let selectedFeatures = [];
+    if(DATASET.OMIT_FEATURES) {
+      selectedFeatures = allFeatures.filter(feature => {
+        return !DATASET.FEATURES.includes(feature)
+      })
+    } else {
+      selectedFeatures = DATASET[FEATURES];
+    }
+    return selectedFeatures;
+}
 
-function createDesignMatrix(features, csvData) {
+function getDesiredNumberOfInstances(csvData) {
+  if(TRAINING_PARAMS['DESIRED_NUM_INSTANCES']) {
+    return Math.min(csvData.length, TRAINING_PARAMS['DESIRED_NUM_INSTANCES']);
+  }
+
+  return csvData.length;
+}
+
+function createDesignMatrix(csvData) {
+  let selectedFeatures = getSelectedFeatures(csvData);
   let designMatrix = [[]];
-  csvData.forEach((row) => {
+  const maxNumInstances = getDesiredNumberOfInstances(csvData);
+  for(let i=0; i< maxNumInstances; i++) {
     let newRow = [];
+    let row = csvData[i];
     Object.keys(row).map((key,index) => {
-      console.log(features);
-      console.log(key);
-        if(features.includes(key)) {
-          console.log(key)
-          newRow.push(row.key)
+        if(selectedFeatures.includes(key)) {
+          newRow.push(parseFloat(row[key]))
         }
     });
     designMatrix.push(newRow);
-  });
-  return designMatrix
+  }
+  return designMatrix.splice(1);
 }
 
-function doRegression() {
-  const mlr = new MLR(X, y);
-  console.log(mlr.toJSON())
-  console.log(mlr.predict([1, 2, 3]));
+function createLabelVector(csvData) {
+  let labelVector = [[]];
+  const maxNumInstances = getDesiredNumberOfInstances(csvData);
 
+  for(let i=0; i<maxNumInstances; i++) {
+    labelVector.push([parseFloat(csvData[i][DATASET.LABEL])]); 
+  }
+
+  return labelVector.splice(1);   // remove empty first element
 }
 
 
@@ -65,98 +79,12 @@ function doRegression() {
 
 // Main
 readFromCsv.then((readData) => {
-  const X = createDesignMatrix(["x1", "x2", "x3"], readData)
-  console.log(X);
+  const X = createDesignMatrix(readData);
+  const y = createLabelVector(readData);
+  console.log("Starting training with X = (" + X.length + "," + X[0].length + "), y = (" + y.length + ")");
+  const mlr = new MLR(X,y);
+  console.log(mlr.toJSON());
 }).catch((err) => {
     console.log(err);
 });
 
-
-// let csvData = readCSV(testFilePath);
-// let X = createDesignMatrix(["x1", "x2", "x3"], csvData);
-// console.log(X);
-
-
-
-
-
-
-
-
-
-
-
-
-// Basic Linear Regression
-// let inputs = [1, 2, 3, 4, 5];
-// let outputs = [10, 20, 30, 40, 50];
-// let regression = new SLR(inputs, outputs);
-// console.log(regression.toString(3));
-
-
-
-
- 
-// const x = [
-//   [0, 0], 
-//   [1, 2], 
-//   [2, 3], 
-//   [3, 4]
-// ];
-
-// // Y = 5 + x1 + x2
-// const y = [[0], [8], [10], [12]];
-
-
-
-
-
-
-
-
-
-
-/*
-const csvFilePath = 'kc_house_data.csv'; // Data
-let csvData = [], // parsed Data
-  X = [[]], // Input
-  y = [[]]; // Output
-let mlr;
-
-const readline = require('readline'); // For user prompt to allow predictions
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-csv()
-  .fromFile(csvFilePath)
-  .on('json', (jsonObj) => {
-    csvData.push(jsonObj);
-  })
-  .on('done', () => {
-    dressData(); // To get data points from JSON Objects
-    performRegression();
-  });
-
-function performRegression() {
-  X.splice(0,1);
-  y.splice(0,1);
-  mlr = new MLR(X, y); // Train the model on training data
-  console.log("Result: ");
-  console.log(mlr.weights);
-  predictOutput();
-}
-
-
-
-
-function predictOutput() {
-  rl.question('Enter living square footage (Press CTRL+C to exit) : ', (answer) => {
-    console.log(`At X = ${answer}, y =  ${mlr.predict([parseFloat(answer)])}`);
-    predictOutput();
-  });
-}
-
-*/
