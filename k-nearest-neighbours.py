@@ -47,6 +47,7 @@ correctPredictions = 0.
 init = tf.global_variables_initializer()
 
 # Start training
+print("Starting training")
 with tf.Session() as sess:
     sess.run(init)
 
@@ -60,6 +61,7 @@ with tf.Session() as sess:
         if trainClasses[nearestNeighbourIndex] == testClasses[i]:
             correctPredictions += 1
         
-        print("Test", i, "Predicted class:", trainClasses[nearestNeighbourIndex], "- True Class:", testClasses[i])
-
+        # print("Test", i, "Predicted class:", trainClasses[nearestNeighbourIndex], "- True Class:", testClasses[i])
+    
+    print("Finished Training with ", numTrainPoints, " and evaluation with ", numTestPoints)
     print("Accuracy:", correctPredictions / numTestPoints)

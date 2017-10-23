@@ -15,12 +15,15 @@ from config import TRAINING_PARAMS, ACTIVE_DATASET
 def printM(dataset):
     print(DataFrame(dataset), "\n")
 
+
 # Read's data from CSV File
 def readData():
-    csvData = np.recfromcsv(ACTIVE_DATASET['FILE_NAME'], delimiter=ACTIVE_DATASET['DELIMETER'], filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ')
-    numInstances = TRAINING_PARAMS['DESIRED_NUM_INSTANCES'] or len(csvData)
-    csvData = csvData[:numInstances]
-    return csvData
+    csvData = np.recfromcsv(ACTIVE_DATASET['FILE_NAME'], delimiter=ACTIVE_DATASET['DELIMETER'], filling_values=np.nan, case_sensitive=True, deletechars='', replace_space=' ') 
+    if(TRAINING_PARAMS['DESIRED_NUM_INSTANCES']):
+        numInstances = min(TRAINING_PARAMS['DESIRED_NUM_INSTANCES'], len(csvData))
+    else:
+        numInstances = len(csvData)
+    return csvData[:numInstances]
 
 
 # Finds the column numbers of the features to be included in the design matrix X
