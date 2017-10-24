@@ -29,22 +29,23 @@ HOUSE_DATA = dict(
     LABEL = "SalePrice"
 )
 
-# Dataset 4 - Red Wine
-RED_WINE = dict(
-    FILE_NAME = "winequality-red.csv",
-    DELIMETER = ";",
-    FEATURES = ["quality"],
-    OMIT_FEATURES = True,
-    LABEL = "quality"
-)
 
 # Dataset 3 - 10k of SUM without noise (for faster debugging)
 SUM_10K_WITHOUT_NOISE = dict(
     FILE_NAME = "sum_10k_without_noise.csv",
-    DELIMETER = ";",
+    DELIMETER = ",",
     FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
     LABEL = "Target"
+)
+
+# Dataset 4 - 10k of SUM with noise (for faster debugging)
+SUM_10K_WITH_NOISE = dict(
+    FILE_NAME = "sum_10k_with_noise.csv",
+    DELIMETER = ",",
+    FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
+    OMIT_FEATURES = True,
+    LABEL = "Noisy Target"
 )
 
 
@@ -63,11 +64,14 @@ TEST_CLASSIFICATION_DATA = dict(
 SUM_WITH_NOISE_KNN = dict(SUM_WITH_NOISE)
 SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target Class"
 
+SUM_10K_WITHOUT_NOISE_KNN = dict(SUM_10K_WITHOUT_NOISE)
+SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target Class"
+
 
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
 HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
 
-ACTIVE_DATASET = SUM_WITH_NOISE_KNN
+ACTIVE_DATASET = SUM_10K_WITH_NOISE
 
