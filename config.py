@@ -44,7 +44,7 @@ SUM_10K_WITHOUT_NOISE = dict(
     DELIMETER = ";",
     FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Target"
+    LABEL = "Target Class"
 )
 
 

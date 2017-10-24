@@ -13,7 +13,7 @@ y = createLabelVector(data)
 xtrain, ytrain, xtest, ytest = splitData(x,y)
 
 clf = neighbors.KNeighborsClassifier()
-clf.fit(xtrain, ytrain.ravel().reshape(70000,1))
+clf.fit(xtrain, ytrain.reshape(len(ytrain),1))
 
 accuracy = clf.score(xtest,ytest)
 print(accuracy)
