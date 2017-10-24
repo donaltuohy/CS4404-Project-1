@@ -1,6 +1,9 @@
 ####
 ####Loading in Data and organising it
 ####
+import matplotlib.pyplot as plt
+from sklearn import datasets, linear_model
+from sklearn.metrics import mean_squared_error,mean_absolute_error, r2_score
 
 #import util functions
 from util import *
@@ -11,6 +14,39 @@ def prependBiasTerm(dataset):
   numFeatures = dataset.shape[1]
   X = np.reshape(np.c_[np.ones(numInstances),dataset],[numInstances,numFeatures + 1])
   return X
+
+###
+###Using sklearn to train
+###
+def trainModel(xTrain, yTrain):
+  # Create linear regression object
+  regr = linear_model.LinearRegression()
+  # Train the model using the training sets
+  regr.fit(xTrain, yTrain)
+  yPrediction = regr.predict(xTest)
+  return yPrediction
+
+def evaluateModel(yTest, yPrediction):
+  
+  # The mean squared error
+  mse = mean_squared_error(yTest, yPrediction)
+  # The mean absolute error
+  mae = mean_absolute_error(yTest, yPrediction)
+  return mse, mae
+
+def plotReg(yTest, yPrediction):
+  # Plot outputs
+  #plt.plot(xTest[:,1], yTest, "ro" )
+  #plt.plot(xTest[:,1], yPrediction, "bo")
+  plt.plot(yTest, yPrediction, "ro")
+
+  plt. xlabel("Actual Value")
+  plt. ylabel("Predicted Value")
+  plt.xticks(())
+  plt.yticks(())
+
+  plt.show()
+
 
 #Use the util functions to read in the dataset and create required matrices
 data = readData()
@@ -24,47 +60,28 @@ y = featureNormalize(y)
 # Prepends a column of ones to design matrix to represent bias term 
 x = prependBiasTerm(x)
 
-#Split the data in the way specified in config.py
-xTrain = splitData(x, y)[0]
-yTrain = splitData(x, y)[1]
-xTest = splitData(x, y)[2]
-yTest = splitData(x,y)[3]
-
-###
-###Using sklearn to train
-###
 
 
-import matplotlib.pyplot as plt
-from sklearn import datasets, linear_model
-from sklearn.metrics import mean_squared_error,mean_absolute_error, r2_score
+if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):        
+    mse = []
+    mae = []
+    numDataSplits = TRAINING_PARAMS['NUM_SPLITS']
+    print("Cross Validation used for splitting")
+    for i in range(numDataSplits):
+        xTrain, yTrain, xTest, yTest = splitUpDataCrossVal(x, y, numDataSplits, crossValIndex=i)
+        predictedY = trainModel(xTrain, yTrain)
+        currentMSE, currentMAE = evaluateModel(yTest, predictedY)
+        mse.append(currentMSE)
+        mae.append(currentMAE)
+    averageMSE = np.mean(mse)
+    averageMAE = np.mean(mae)
+else:
+    print("70/30 method used for splitting")
+    xTrain, yTrain, xTest, yTest =splitData7030(x, y)
+    predictedY = trainModel(xTrain, yTrain)
+    averageMSE, averageMAE = evaluateModel(yTest, predictedY)
 
-# Create linear regression object
-regr = linear_model.LinearRegression()
+#plotReg(xTrain, predictedY)
 
-# Train the model using the training sets
-regr.fit(xTrain, yTrain)
-
-# Make predictions using the testing set
-yPrediction = regr.predict(xTest)
-
-# The coefficients
-print('Coefficients: \n', regr.coef_)
-# The mean squared error
-print("Mean Squared Error: %.2f" % mean_squared_error(yTest, yPrediction))
-print("Mean Absolute Error: %.2f" % mean_absolute_error(yTest, yPrediction))
-
-# Explained variance score: 1 is perfect prediction
-print('Variance score: %.2f' % r2_score(yTest, yPrediction))
-
-# Plot outputs
-#plt.plot(xTest[:,1], yTest, "ro" )
-#plt.plot(xTest[:,1], yPrediction, "bo")
-plt.plot(yTest, yPrediction, "ro")
-
-plt. xlabel("Actual Value")
-plt. ylabel("Predicted Value")
-plt.xticks(())
-plt.yticks(())
-
-plt.show()
+print("Average mean squared error: ", averageMSE)
+print("Average mean absolute error: ", averageMAE)

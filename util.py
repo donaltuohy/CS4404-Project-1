@@ -30,6 +30,29 @@ def readData():
 def getDesiredFeatureIndices(allFeatureNames, features, omitFeatures):
     return [i for i, x in enumerate(allFeatureNames) if ((x in features and not omitFeatures) or (x not in features and omitFeatures))]
 
+# Splits data according to chosen split method
+def splitData7030(X, y):
+    if(TRAINING_PARAMS['SPLIT_METHOD'] == "70/30"):
+        numTrainInstances = round(len(X)*0.7)
+        xTrain = X[:numTrainInstances, :]
+        yTrain = y[:numTrainInstances]
+        xTest = X[numTrainInstances:]
+        yTest = y[numTrainInstances:]
+        return xTrain, yTrain, xTest, yTest
+
+def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
+    testSetSize = round(X.shape[0] / splitFactor)
+    startTestIndex =  crossValIndex * testSetSize
+
+    xTest = X[startTestIndex:startTestIndex+testSetSize]
+    yTest = y[startTestIndex:startTestIndex+testSetSize]
+
+    xTrain = X[:startTestIndex, :]
+    xTrain = np.append(xTrain, np.array(X[startTestIndex+testSetSize:]), axis=0)
+
+    yTrain = y[:startTestIndex]
+    yTrain = np.append(yTrain, np.array(y[startTestIndex+testSetSize:]), axis=0)
+    return xTrain, yTrain, xTest, yTest
 
 # Builds the design matrix X inlcuding a column vector of 1s for the bias terms
 def createDesignMatrix(dataset):
