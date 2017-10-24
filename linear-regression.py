@@ -37,7 +37,9 @@ y = util.featureNormalize(y)
 
 X = prependBiasTerm(X)
 
-xTrain, yTrain, xTest, yTest = util.splitData(X, y)
+xTrain, yTrain, xTest, yTest = util.splitData7030(X, y)
+# x10Train, y10Train, x10Test, y10Test = util.splitUpDataCrossVal(X, y, splitFactor=10)
+util.splitUpDataCrossVal(X, y, splitFactor=10)
 
 # print(xTrain)
 # showPlots(X,y)
@@ -82,7 +84,7 @@ plt.plot(range(len(lossFunctionHistory)), lossFunctionHistory, 'b+')
 plt.xlabel("Epoch #")
 plt.ylabel("Cost function")
 plt.axis([0,util.TRAINING_PARAMS['TRAINING_EPOCHS'],0,np.max(lossFunctionHistory) + (0.1*np.max(lossFunctionHistory))])
-plt.show()
+# plt.show()
 
 # Predict Y Values for given test values
 predictedY = sess.run(yPredictor, feed_dict={X: xTest})
@@ -104,7 +106,7 @@ plt.plot(xTest[:,1], yTest, 'ro')
 plt.plot(xTest[:,1], predictedY, 'bx')
 plt.xlabel("Feature 1")
 plt.ylabel(util.ACTIVE_DATASET['LABEL'])
-plt.show()
+# plt.show()
 
 # Plot Predicted y values against measured y values
 plt.plot(predictedY, yTest, 'ro')
@@ -117,4 +119,4 @@ else:
     plt.plot(range(-3,3), range(-3,3), 'b')
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
-plt.show()
+# plt.show()

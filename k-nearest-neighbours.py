@@ -24,7 +24,7 @@ data = readData()
 points = createDesignMatrix(data)
 classes = createLabelVector(data)
 
-trainPoints, trainClasses, testPoints, testClasses = splitData(points, classes)
+trainPoints, trainClasses, testPoints, testClasses = splitData7030(points, classes)
 numFeatures = trainPoints.shape[1]
 numTrainPoints = trainPoints.shape[0]
 numTestPoints = testPoints.shape[0]
