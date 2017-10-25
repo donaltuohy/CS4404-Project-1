@@ -1,29 +1,34 @@
 from util import *
 import pandas as pd
 import sklearn
-from sklearn import neighbors, ensemble
+from sklearn import ensemble
 from sklearn.ensemble import RandomForestClassifier
 
-n_neighbors = 1
+def trainModel(xtrain, ytrain, xtest, ytest):
+    clf = RandomForestClassifier()
+    clf.fit(xtrain,ytrain.reshape(len(ytrain), -1))
+    accuracy = clf.score(xtest,ytest)
+    return accuracy
+
 
 data = readData()
-print("Data read in")
-
 x = createDesignMatrix(data)
 y = createLabelVector(data)
-print("Vectors created")
 
-xtrain, ytrain, xtest, ytest = splitData(x,y)
-print("Data split")
+if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):        
+    acc = []
+    numDataSplits = TRAINING_PARAMS['NUM_SPLITS']
+    print("Cross Validation used for splitting")
+    for i in range(numDataSplits):
+        xTrain, yTrain, xTest, yTest = splitUpDataCrossVal(x, y, numDataSplits, crossValIndex=i)
+        currentAcc = trainModel(xTrain, yTrain, xTest, yTest)
+        acc.append(currentAcc)
+    averageAcc = np.mean(acc)
+else:
+    print("70/30 method used for splitting")
+    xTrain, yTrain, xTest, yTest =splitData7030(x, y)
+    averageAcc = trainModel(xTrain, yTrain, xTest, yTest)
 
-clf = RandomForestClassifier()
-print("about to fit")
 
-clf.fit(xtrain,ytrain.reshape(len(ytrain), -1))
-print("Data Fitted")
 
-accuracy = clf.score(xtest,ytest)
-print("Accuracy with Random Forest Classification: ", accuracy)
-
-prediction = clf.predict(xtest)
-print(prediction)
+print("Accuracy with Random Forest Classification: ", averageAcc)
