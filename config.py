@@ -14,7 +14,7 @@ TRAINING_PARAMS = dict(
 
 # Dataset 1 - SUM with noise
 SUM_WITH_NOISE = dict(
-    FILE_NAME = "sum_with_noise.csv",
+    FILE_NAME = "SUM_With_Noise.csv",
     DELIMETER = ";",
     FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
     OMIT_FEATURES = True,
@@ -23,7 +23,7 @@ SUM_WITH_NOISE = dict(
 
 # Dataset 2 - SUM without noise
 SUM_WITHOUT_NOISE = dict(
-    FILE_NAME = "winequality-red.csv",
+    FILE_NAME = "SUM_Without_Noise.csv",
     DELIMETER = ";",
     FEATURES = ["quality"],
     OMIT_FEATURES = True,
@@ -40,21 +40,11 @@ SUM_10K_WITHOUT_NOISE = dict(
 )
 
 
-TEST_CLASSIFICATION_DATA = dict(
-    FILE_NAME = "test_classification.csv",
-    DELIMETER = ",",
-    FEATURES = ["x", "y"],
-    OMIT_FEATURES = False,
-    LABEL = "class"   
-)
-
-
 ###########################################
 ####                 KNN            #######
 ###########################################
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
 HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
-
 
 ACTIVE_DATASET = SUM_10K_WITHOUT_NOISE
