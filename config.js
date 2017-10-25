@@ -51,15 +51,6 @@ const LINEAR_REGRESSION_DATASETS = {
         OMIT_FEATURES: true,
         LABEL: "Noisy Target"
     },
-
-    // Dataset 5 - Test
-    TEST_LINEAR_REGRESSION_DATA: {
-        FILE_NAME: "test.csv",
-        DELIMETER: ",",
-        FEATURES: ["x1", "x2", "x3"],
-        OMIT_FEATURES: false,
-        LABEL: "y"   
-    }
 };
 
 const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['SUM_10K_WITH_NOISE'];
