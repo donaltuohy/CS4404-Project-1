@@ -1,7 +1,8 @@
 const TRAINING_PARAMS = {
     NORMALIZE_METHOD: "ZSCORE",             // How features should be normalized
     DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (null uses all instances)
-    SPLIT_METHOD: "70/30",                  // One of "70/30" or "10Fold".
+    SPLIT_METHOD: "KFOLD",                  // One of "70/30" or "10Fold".
+    NUM_SPLITS: 10,
     LEARNING_RATE: 0.1,                     // Stepsize for gradient descent
     TRAINING_EPOCHS: 100                    // Number of iterations of gradient descent training
 };
@@ -26,17 +27,17 @@ const LINEAR_REGRESSION_DATASETS = {
 
     // Dataset 2 - House Data
     HOUSE_DATA: {
-        FILE_NAME: "housing_data.csv",
+        FILE_NAME: "kc_house_data.csv",
         DELIMETER: ",",
-        FEATURES: ["LotArea", "OverallQual", "OverallCond", "BedroomAbvGr"],
+        FEATURES: ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
         OMIT_FEATURES: false,
-        LABEL: "SalePrice"
+        LABEL: "price"
     },
 
     // Dataset 3 - 10k of SUM without noise (for faster debugging)
     SUM_10K_WITHOUT_NOISE: {
         FILE_NAME: "sum_10k_without_noise.csv",
-        DELIMETER: ",",
+        DELIMETER: ";",
         FEATURES: ["Instance", "Target", "Target Class"],
         OMIT_FEATURES: true,
         LABEL: "Target"
@@ -45,7 +46,7 @@ const LINEAR_REGRESSION_DATASETS = {
     // Dataset 4 - 10k of SUM without noise (for faster debugging)
     SUM_10K_WITH_NOISE: {
         FILE_NAME: "sum_10k_with_noise.csv",
-        DELIMETER: ",",
+        DELIMETER: ";",
         FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
         OMIT_FEATURES: true,
         LABEL: "Noisy Target"
