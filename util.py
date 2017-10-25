@@ -37,9 +37,7 @@ def createDesignMatrix(dataset):
     else:
         numDesignMatrixFeatures = len(ACTIVE_DATASET['FEATURES'])
     X = np.ones((len(dataset), numDesignMatrixFeatures))
-
     featureIndices = getDesiredFeatureIndices(list(dataset.dtype.names), ACTIVE_DATASET['FEATURES'], ACTIVE_DATASET['OMIT_FEATURES'])
-
     currentCol = 0
     for i, row in enumerate(dataset):
         for j, col in enumerate(row):
@@ -57,13 +55,12 @@ def createLabelVector(dataset):
 
 # Splits data according to chosen split method
 def splitData7030(X, y):
-    if(TRAINING_PARAMS['SPLIT_METHOD'] == "70/30"):
-        numTrainInstances = round(len(X)*0.7)
-        xTrain = X[:numTrainInstances, :]
-        yTrain = y[:numTrainInstances]
-        xTest = X[numTrainInstances:]
-        yTest = y[numTrainInstances:]
-        return xTrain, yTrain, xTest, yTest
+    numTrainInstances = round(len(X)*0.7)
+    xTrain = X[:numTrainInstances, :]
+    yTrain = y[:numTrainInstances]
+    xTest = X[numTrainInstances:]
+    yTest = y[numTrainInstances:]
+    return xTrain, yTrain, xTest, yTest
 
 def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
     testSetSize = round(X.shape[0] / splitFactor)

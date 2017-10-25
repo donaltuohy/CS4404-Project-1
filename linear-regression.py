@@ -72,14 +72,12 @@ cost = tf.reduce_mean(tf.square(Y-yPredictor))
 trainingStep = tf.train.GradientDescentOptimizer(util.TRAINING_PARAMS['LEARNING_RATE']).minimize(cost)
 
 
-
-
-
-
 # Create a session
 sess = tf.Session()
 sess.run(init)
 
+
+# Train the model
 if(util.TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):        
     mse = []
     mae = []
@@ -91,15 +89,18 @@ if(util.TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):
         currentMSE, currentMAE = evaluateModel(yTest, predictedY)
         mse.append(currentMSE)
         mae.append(currentMAE)
+    print("MSE: ", mse)
+    print("MAE: ", mae)
     averageMSE = np.mean(mse)
     averageMAE = np.mean(mae)
+
 else:
     xTrain, yTrain, xTest, yTest = util.splitData7030(designMatrix, labelVector)
     trainModel(xTrain, yTrain, sess, trainingStep, lossFunctionHistory)
     predictedY = sess.run(yPredictor, feed_dict={X: xTest})
     averageMSE, averageMAE = evaluateModel(yTest, predictedY)
 
-
+print("Most recent weights: ", np.matrix(sess.run(W)))
 print("Average MSE: %4f" % averageMSE, ", Average MAE: %4f" % averageMAE)
 
 
@@ -117,28 +118,22 @@ print("Average MSE: %4f" % averageMSE, ", Average MAE: %4f" % averageMAE)
 # plt.show()
 
 
-# Print Results
-# weights = np.matrix(sess.run(W))
-# print("Minimum Loss Function Value:", np.min(lossFunctionHistory),", MSE: %.4f" % sess.run(mse), ", MAE: %.4f" % sess.run(mae))
-# print("Weights: ", weights)
-
-
-# # Plot first feature against predicter / measured values
-# plt.plot(xTest[:,1], yTest, 'ro')
-# plt.plot(xTest[:,1], predictedY, 'bx')
-# plt.xlabel("Feature 1")
-# plt.ylabel(util.ACTIVE_DATASET['LABEL'])
-# plt.show()
+# Plot first feature against predicter / measured values
+plt.plot(xTest[:,1], yTest, 'ro')
+plt.plot(xTest[:,1], predictedY, 'bx')
+plt.xlabel("Feature 1")
+plt.ylabel(util.ACTIVE_DATASET['LABEL'])
+plt.show()
 
 # # Plot Predicted y values against measured y values
-# plt.plot(predictedY, yTest, 'ro')
+plt.plot(predictedY, yTest, 'ro')
 
-# if((util.TRAINING_PARAMS['NORMALIZE_METHOD'] == "MINMAX")):
-#     # Plot over range from [0,1]
-#     plt.plot([0, 1])
-# else:
-#     # Plot over range [-3, 3] ~ 99 % of data
-#     plt.plot(range(-3,3), range(-3,3), 'b')
-# plt.xlabel("Predicted")
-# plt.ylabel("Actual")
-# plt.show()
+if((util.TRAINING_PARAMS['NORMALIZE_METHOD'] == "MINMAX")):
+    # Plot over range from [0,1]
+    plt.plot([0, 1])
+else:
+    # Plot over range [-3, 3] ~ 99 % of data
+    plt.plot(range(-3,3), range(-3,3), 'b')
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()

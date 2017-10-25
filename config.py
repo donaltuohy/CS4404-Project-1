@@ -1,10 +1,14 @@
 TRAINING_PARAMS = dict(
-    NORMALIZE_METHOD = "ZSCORE",             # How features should be normalized
-    DESIRED_NUM_INSTANCES = 100000,          # Specify max number of instances (None uses all instances)
-    SPLIT_METHOD = "KFOLD",                  # One of "70/30" or "KFOLD"
-    NUM_SPLITS = 10,                         # K in K fold cross validation
-    LEARNING_RATE = 0.1,                     # Stepsize for gradient descent
-    TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
+    NORMALIZE_METHOD = "ZSCORE",            # How features should be normalized
+    DESIRED_NUM_INSTANCES = 100000,           # Specify max number of instances (None uses all instances)
+    SPLIT_METHOD = "70/30",                 # One of "70/30" or "KFOLD"
+    NUM_SPLITS = 10,                        # K in K fold cross validation
+    LEARNING_RATE = 0.1,                    # Stepsize for gradient descent
+    TRAINING_EPOCHS = 100,                  # Number of iterations of gradient descent training
+    
+    IS_KNN_LABEL_STRING = False,             # If predicted string categorical data, set to True
+    KNN_CLASS_THRESHOLD = 40000,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
+    K = 5                                   # Number of nearest neighbours to use
 )
 
 # Extract the data.zip folder to the working directory (same as this file) - should be automated
@@ -23,11 +27,11 @@ SUM_WITH_NOISE = dict(
 
 # Dataset 2 - House Data
 HOUSE_DATA = dict(
-    FILE_NAME = "housing_data.csv",
+    FILE_NAME = "kc_house_data.csv",
     DELIMETER = ",",
-    FEATURES = ["LotArea", "OverallQual", "OverallCond", "BedroomAbvGr"],
+    FEATURES = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
     OMIT_FEATURES = False,
-    LABEL = "SalePrice"
+    LABEL = "price"
 )
 
 
@@ -50,15 +54,6 @@ SUM_10K_WITH_NOISE = dict(
 )
 
 
-TEST_CLASSIFICATION_DATA = dict(
-    FILE_NAME = "test_classification.csv",
-    DELIMETER = ",",
-    FEATURES = ["x", "y"],
-    OMIT_FEATURES = False,
-    LABEL = "class"   
-)
-
-
 ###########################################
 ####                 KNN            #######
 ###########################################
@@ -66,13 +61,20 @@ SUM_WITH_NOISE_KNN = dict(SUM_WITH_NOISE)
 SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target Class"
 
 SUM_10K_WITHOUT_NOISE_KNN = dict(SUM_10K_WITHOUT_NOISE)
-SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target Class"
+SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target"
+
+SUM_10K_WITH_NOISE_KNN = dict(SUM_10K_WITH_NOISE)
+SUM_10K_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
 
 
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
-HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
-HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
+#HOUSE_DATA_KNN['FEATURES'] = ['price', 'bathrooms', 'sqft_living', 'sqft_lot', 'condition', 'grade', 'waterfront', 'view', 'sqft_above', 'sqft_basement']
+
+# ~50% accuracy with K = 1, Threshold  = 40k
+HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode']
+HOUSE_DATA_KNN['OMIT_FEATURES'] = True
+HOUSE_DATA_KNN['LABEL'] = "price"
 
 
-ACTIVE_DATASET = SUM_10K_WITH_NOISE
+ACTIVE_DATASET = HOUSE_DATA
 
