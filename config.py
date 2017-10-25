@@ -7,8 +7,8 @@ TRAINING_PARAMS = dict(
     TRAINING_EPOCHS = 100,                  # Number of iterations of gradient descent training
     
     IS_KNN_LABEL_STRING = False,             # If predicted string categorical data, set to True
-    KNN_CLASS_THRESHOLD = 40000,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
-    K = 5                                   # Number of nearest neighbours to use
+    KNN_CLASS_THRESHOLD = 5000,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
+    K = 2                                   # Number of nearest neighbours to use
 )
 
 # Extract the data.zip folder to the working directory (same as this file) - should be automated
@@ -70,11 +70,11 @@ SUM_10K_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
 #HOUSE_DATA_KNN['FEATURES'] = ['price', 'bathrooms', 'sqft_living', 'sqft_lot', 'condition', 'grade', 'waterfront', 'view', 'sqft_above', 'sqft_basement']
 
-# ~50% accuracy with K = 1, Threshold  = 40k
+# Great results for house data > 90% accuracy
 HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode']
 HOUSE_DATA_KNN['OMIT_FEATURES'] = True
 HOUSE_DATA_KNN['LABEL'] = "price"
 
 
-ACTIVE_DATASET = HOUSE_DATA
+ACTIVE_DATASET = HOUSE_DATA_KNN
 
