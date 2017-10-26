@@ -55,6 +55,7 @@ y = createLabelVector(data)
 
 #Normalize the features
 x = featureNormalize(x)
+print(y)
 y = featureNormalize(y)
 
 # Prepends a column of ones to design matrix to represent bias term 

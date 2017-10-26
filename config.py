@@ -2,7 +2,7 @@ TRAINING_PARAMS = dict(
     NORMALIZE_METHOD = "ZSCORE",             # How features should be normalized
     DESIRED_NUM_INSTANCES = 100000,          # Specify max number of instances (None uses all instances)
     SPLIT_METHOD = "70/30",                  # One of "70/30" or "KFOLD"
-    NUMBER_NEIGHBORS = 15,                   # Number of neighbors in KNN 
+    NUMBER_NEIGHBORS = 2,                   # Number of neighbors in KNN 
     NUM_SPLITS = 10,                         # K in K fold cross validation
     LEARNING_RATE = 0.1,                     # Stepsize for gradient descent
     TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
@@ -15,7 +15,7 @@ TRAINING_PARAMS = dict(
 
 # Dataset 1 - SUM with noise
 SUM_WITH_NOISE = dict(
-    FILE_NAME = "sum_with_noise.csv",
+    FILE_NAME = "SUM_With_Noise.csv",
     DELIMETER = ";",
     FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
     OMIT_FEATURES = True,
@@ -24,21 +24,13 @@ SUM_WITH_NOISE = dict(
 
 # Dataset 2 - House Data
 HOUSE_DATA = dict(
-    FILE_NAME = "housing_data.csv",
+    FILE_NAME = "kc_house_data.csv",
     DELIMETER = ",",
-    FEATURES = ["LotArea", "OverallQual", "OverallCond", "BedroomAbvGr"],
+    FEATURES = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
     OMIT_FEATURES = False,
-    LABEL = "SalePrice"
+    LABEL = "price"
 )
 
-# Dataset 4 - Red Wine
-RED_WINE = dict(
-    FILE_NAME = "winequality-red.csv",
-    DELIMETER = ";",
-    FEATURES = ["quality"],
-    OMIT_FEATURES = True,
-    LABEL = "quality"
-)
 
 # Dataset 3 - 10k of SUM without noise (for faster debugging)
 SUM_10K_WITHOUT_NOISE = dict(
@@ -63,8 +55,12 @@ TEST_CLASSIFICATION_DATA = dict(
 ####                 KNN            #######
 ###########################################
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
-HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
-HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
+#HOUSE_DATA_KNN['FEATURES'] = ['price', 'bathrooms', 'sqft_living', 'sqft_lot', 'condition', 'grade', 'waterfront', 'view', 'sqft_above', 'sqft_basement']
+
+# Great results for house data > 90% accuracy
+HOUSE_DATA_KNN['FEATURES'] = ['condition','id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode']
+HOUSE_DATA_KNN['OMIT_FEATURES'] = True
+HOUSE_DATA_KNN['LABEL'] = "condition"
 
 
-ACTIVE_DATASET = SUM_WITH_NOISE
+ACTIVE_DATASET = HOUSE_DATA_KNN

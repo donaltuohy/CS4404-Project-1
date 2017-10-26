@@ -6,13 +6,13 @@ from sklearn.neighbors import NearestNeighbors
 def trainModel(xtrain, ytrain, xtest, ytest):
     clf = neighbors.KNeighborsClassifier(TRAINING_PARAMS['NUMBER_NEIGHBORS'])
     clf.fit(xtrain, ytrain)
+    
     accuracy = clf.score(xtest,ytest)
     return accuracy
 
 
 data = readData()
 
-n_neighbors = 15
 x = createDesignMatrix(data)
 y = createLabelVector(data)
 
@@ -24,10 +24,11 @@ if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):
         xTrain, yTrain, xTest, yTest = splitUpDataCrossVal(x, y, numDataSplits, crossValIndex=i)
         currentAcc = trainModel(xTrain, yTrain, xTest, yTest)
         acc.append(currentAcc)
+        print("Accuracy with fold ", i+1, ": ", currentAcc)
     averageAcc = np.mean(acc)
 else:
     print("70/30 method used for splitting")
     xTrain, yTrain, xTest, yTest =splitData7030(x, y)
     averageAcc = trainModel(xTrain, yTrain, xTest, yTest)
 
-print("Average Accuracy: ", averageAcc)
+print("Average Accuracy with Nearest Neighbors: ", averageAcc)

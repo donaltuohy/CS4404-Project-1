@@ -23,6 +23,7 @@ if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):
         xTrain, yTrain, xTest, yTest = splitUpDataCrossVal(x, y, numDataSplits, crossValIndex=i)
         currentAcc = trainModel(xTrain, yTrain, xTest, yTest)
         acc.append(currentAcc)
+        print("Accuracy with fold ", i+1, ": ", currentAcc)
     averageAcc = np.mean(acc)
 else:
     print("70/30 method used for splitting")
