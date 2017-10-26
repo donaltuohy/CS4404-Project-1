@@ -1,0 +1,21 @@
+SUM WITH NOISE - 70:30
+Accuracy with  100 is :  0.964278212602
+Accuracy with  500 is :  0.964311673459
+Accuracy with  1000 is :  0.964334582151
+Accuracy with  5000 is :  0.964342201349
+Accuracy with  10000 is :  0.964410087635
+Accuracy with  50000 is :  0.964380756677
+Accuracy with  100000 is :  0.964218383434
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
+
+SUM WITH NOISE - KFOLD
+Accuracy with  100 is :  0.964419676837
+Accuracy with  500 is :  0.964421504021
+Accuracy with  1000 is :  0.964414484165
+Accuracy with  5000 is :  0.964390248997
+Accuracy with  10000 is :  0.964459081707
+Accuracy with  50000 is :  0.96451393681
+Accuracy with  100000 is :  0.964567728789
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
