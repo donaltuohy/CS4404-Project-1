@@ -8,6 +8,17 @@ const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
 
+function getDistinctClasses(vector) {
+  let distinct = [];
+  vector.forEach(element => {
+    if(!distinct.includes(element)) {
+      distinct.push(element);
+    }
+  })
+
+  return distinct;
+}
+
 /*
   Main function
 */
@@ -36,26 +47,42 @@ util.readFromCsv.then((readData) => {
   else {
     const splitData = util.split7030(points, classes);
     const pointsTrain = splitData.xTrain;
-    const classesTrain = splitData.yTrain;
+    let classesTrain = splitData.yTrain;
     const pointsTest = splitData.xTest;
-    const classesTest = splitData.yTest;
+    let classesTest = splitData.yTest;
+
+    const distinct =  getDistinctClasses(classesTrain);
+    classesTrain = classesTrain.map(point => {
+        return distinct.indexOf(point);
+    })
+
+    classesTest = classesTest.map(point => {
+        return distinct.indexOf(point);
+    })
+
+
 
     console.log("Evaluation with 70/30");
     console.log("Training with pointsTrain = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classesTrain = [" + classesTrain.length + "]");
 
-    var options = {
-        seed: 3,
-        maxFeatures: 0.8,
-        replacement: true,
-        nEstimators: 25
-    };
-    
-    var classifier = new RFClassifier();
-    classifier.train(pointsTrain, classesTrain);
-    var result = classifier.predict(classesTest);
 
+    const classifier = new RFClassifier();
+    classifier.train(pointsTrain, classesTrain);
+
+    console.log("Finished Training");
+    const predictions = classifier.predict(pointsTest);
+
+    let numCorrect = 0;
+
+    for(let i=0; i<predictions.length; i++) {
+      if(predictions[i] === classesTest[i]) {
+        numCorrect ++;
+      }
+    }
+
+    const accuracy = parseFloat(numCorrect) / predictions.length
+    console.log(accuracy)
     
-    console.log(result);
   }
 
 }).catch((err) => {

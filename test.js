@@ -1,11 +1,24 @@
-const KNN = require('ml-knn')
+const IrisDataset =  require('ml-dataset-iris');
+const RFClassifier = require('ml-random-forest').RandomForestClassifier;
+ 
+var trainingSet = IrisDataset.getNumbers();
+var predictions = IrisDataset.getClasses().map(
+    (elem) => IrisDataset.getDistinctClasses().indexOf(elem)
+);
+ 
+console.log(IrisDataset.getClasses())
 
-var dataset = [[0,0], [1,1], [10,10], [11,11]];
-var predictions = [0,0,1,1];
-var knn = new KNN(dataset, predictions, {k: 1});
-
-var dataset = [[0, 1],
-               [12, 10]];
- console.log(knn)
-var ans = knn.predict(dataset);
-console.log(ans);
+var options = {
+    seed: 3,
+    maxFeatures: 0.8,
+    replacement: true,
+    nEstimators: 25
+};
+//  console.log(trainingSet);
+//  console.log(predictions)
+var classifier = new RFClassifier();
+console.log("trainig with: (", trainingSet.length, ",", trainingSet[0].length, ")")
+console.log(predictions.length)
+classifier.train(trainingSet, predictions);
+var result = classifier.predict(trainingSet);
+// console.log(result)

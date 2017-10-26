@@ -65,10 +65,6 @@ const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['HOUSE_DATA'
 const SUM_WITH_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_WITH_NOISE'])
 SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
 
-// const HOUSE_DATA_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['HOUSE_DATA']);
-// HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
-// HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
-
 const HOUSE_DATA_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['HOUSE_DATA']);
 HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode', 'condition']
 HOUSE_DATA_KNN['OMIT_FEATURES'] = true
@@ -76,7 +72,7 @@ HOUSE_DATA_KNN['LABEL'] = "condition"
 
 
 const SUM_10K_WITHOUT_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_10K_WITHOUT_NOISE'])
-SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target"
+SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = 'Target Class'
 
 const KNN_DATASETS = {
     SUM_WITH_NOISE_KNN,
@@ -84,7 +80,7 @@ const KNN_DATASETS = {
     HOUSE_DATA_KNN
 };
 
-const ACTIVE_KNN_DATASET = KNN_DATASETS['HOUSE_DATA_KNN'];
+const ACTIVE_KNN_DATASET = SUM_10K_WITHOUT_NOISE_KNN;
 
 module.exports = {
     ACTIVE_LINEAR_REGRESSION_DATASET,

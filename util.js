@@ -2,7 +2,7 @@ const csv = require('csvtojson');
 
 const CONFIG = require('./config');
 let DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
-// DATASET = CONFIG.ACTIVE_KNN_DATASET;
+DATASET = CONFIG.ACTIVE_KNN_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
  
@@ -65,7 +65,13 @@ function createLabelVector(csvData) {
   const maxNumInstances = getDesiredNumberOfInstances(csvData);
 
   for(let i=0; i<maxNumInstances; i++) {
-    labelVector.push([parseFloat(csvData[i][DATASET.LABEL])]); 
+    const parsedFloat = parseFloat(csvData[i][DATASET.LABEL]);
+    if(isNaN(parsedFloat)) {
+      labelVector.push(csvData[i][DATASET.LABEL]) 
+    } else {
+      labelVector.push([parsedFloat]); 
+    }
+
   }
 
   return labelVector;   // remove empty first element
