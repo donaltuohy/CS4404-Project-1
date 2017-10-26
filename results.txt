@@ -19,3 +19,14 @@ Accuracy with  50000 is :  0.96451393681
 Accuracy with  100000 is :  0.964567728789
 Accuracy with  500000 is :  -9999
 Accuracy with  1000000 is :  -9999
+
+SUM WITHOUT NOISE - KFOLD
+Accuracy with  100 is :  0.99963224452
+Accuracy with  500 is :  0.999632092498
+Accuracy with  1000 is :  0.999633970246
+Accuracy with  5000 is :  0.999628296949
+Accuracy with  10000 is :  0.99963053209
+Accuracy with  50000 is :  0.99961443575
+Accuracy with  100000 is :  0.999618722636
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999

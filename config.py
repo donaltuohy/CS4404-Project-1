@@ -27,9 +27,9 @@ SUM_WITHOUT_NOISE = dict(
     FILE_NAME = "SUM_Without_Noise.csv",
     DELIMETER = ";",
     MAX_CHUNK = 500000,
-    FEATURES = ["quality"],
+    FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "quality"
+    LABEL = "Target Class"
 )
 
 # Dataset 3 - 10k of SUM without noise (for faster debugging)
@@ -50,4 +50,4 @@ SUM_10K_WITHOUT_NOISE = dict(
 #HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 #HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
-ACTIVE_DATASET = SUM_WITH_NOISE
+ACTIVE_DATASET = SUM_WITHOUT_NOISE
