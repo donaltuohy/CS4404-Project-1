@@ -4,7 +4,7 @@ from sklearn import neighbors
 from sklearn.neighbors import NearestNeighbors
 
 def trainModel(xtrain, ytrain, xtest, ytest):
-    clf = neighbors.KNeighborsClassifier()
+    clf = neighbors.KNeighborsClassifier(TRAINING_PARAMS['NUMBER_NEIGHBORS'])
     clf.fit(xtrain, ytrain)
     accuracy = clf.score(xtest,ytest)
     return accuracy
@@ -12,6 +12,7 @@ def trainModel(xtrain, ytrain, xtest, ytest):
 
 data = readData()
 
+n_neighbors = 15
 x = createDesignMatrix(data)
 y = createLabelVector(data)
 

@@ -2,6 +2,7 @@ TRAINING_PARAMS = dict(
     NORMALIZE_METHOD = "ZSCORE",             # How features should be normalized
     DESIRED_NUM_INSTANCES = 100000,          # Specify max number of instances (None uses all instances)
     SPLIT_METHOD = "70/30",                  # One of "70/30" or "KFOLD"
+    NUMBER_NEIGHBORS = 15,                   # Number of neighbors in KNN 
     NUM_SPLITS = 10,                         # K in K fold cross validation
     LEARNING_RATE = 0.1,                     # Stepsize for gradient descent
     TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
@@ -66,4 +67,4 @@ HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePric
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
 
-ACTIVE_DATASET = SUM_10K_WITHOUT_NOISE
+ACTIVE_DATASET = SUM_WITH_NOISE
