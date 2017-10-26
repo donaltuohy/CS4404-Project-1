@@ -4,12 +4,8 @@ const util = require('./util');
 // const SLR = ml.SLR; // Simple Linear Regression
 const MLR = require( 'ml-regression-multivariate-linear');
 
-
 const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
-
-
-
 
 
 /*
@@ -49,6 +45,9 @@ function evaluateModel(yTest, predictions) {
   }
 }
 
+/*
+  Creates the Linear Regression Model and returns the optimized weights
+*/
 function train(xTrain, yTrain) {
   const mlr = new MLR(xTrain,yTrain);
   const weights = mlr.toJSON().weights;
@@ -56,13 +55,10 @@ function train(xTrain, yTrain) {
   return weights;
 }
 
-function evaluate() {
 
-}
-
-
-
-// Main function starts here
+/*
+  Main function
+*/
 util.readFromCsv.then((readData) => {
   let X = util.createDesignMatrix(readData);
   let y = util.createLabelVector(readData);
@@ -92,7 +88,9 @@ util.readFromCsv.then((readData) => {
 
     averageMSE = util.getMeanOfVector(kFoldMSE);
     averageMAE = util.getMeanOfVector(kFoldMAE);
-  } else {
+  } 
+  
+  else {
     const { xTrain, yTrain, xTest, yTest } = util.split7030(X, y);
     console.log("Evaluation with 70/30: training with X = [" + xTrain.length + "," + xTrain[0].length + "], y = [" + yTrain.length + "]");
   
@@ -105,20 +103,6 @@ util.readFromCsv.then((readData) => {
 
   console.log("Average MSE: ", averageMSE);
   console.log("AverageMAE: ", averageMAE);
-  
-
-  // console.log("Starting training with X = [" + xTrain.length + "," + xTrain[0].length + "], y = [" + yTrain.length + "]");
-  // const mlr = new MLR(xTrain,yTrain);
-  // const weights = mlr.toJSON().weights;
-  // console.log("Weights: ", weights);
-
-  // // Predict the test values
-  // const predictions = predictY(xTest, weights);
-
-  // // Evaluate the model
-  // const { mse, mae } = evaluateModel(yTest, predictions);
-  // console.log("Mean Square Error: ", mse);
-  // console.log("Mean Absolute Error: ", mae);
 
 }).catch((err) => {
     console.log(err);
