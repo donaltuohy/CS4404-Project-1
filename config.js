@@ -1,7 +1,7 @@
 const TRAINING_PARAMS = {
     NORMALIZE_METHOD: "ZSCORE",             // How features should be normalized
     DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (null uses all instances)
-    SPLIT_METHOD: "KFOLD",                  // One of "70/30" or "10Fold".
+    SPLIT_METHOD: "70/30",                  // One of "70/30" or "10Fold".
     NUM_SPLITS: 10,
     LEARNING_RATE: 0.1,                     // Stepsize for gradient descent
     TRAINING_EPOCHS: 100                    // Number of iterations of gradient descent training
@@ -63,17 +63,20 @@ const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['HOUSE_DATA'
 const SUM_WITH_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_WITH_NOISE'])
 SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target Class"
 
-
 const HOUSE_DATA_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['HOUSE_DATA']);
 HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
+const SUM_10K_WITHOUT_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_10K_WITHOUT_NOISE'])
+SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Noisy Target Class"
+
 const KNN_DATASETS = {
     SUM_WITH_NOISE_KNN,
+    SUM_10K_WITHOUT_NOISE_KNN,
     HOUSE_DATA_KNN
 };
 
-const ACTIVE_KNN_DATASET = KNN_DATASETS['SUM_WITH_NOISE_KNN'];
+const ACTIVE_KNN_DATASET = KNN_DATASETS['SUM_10K_WITHOUT_NOISE_KNN'];
 
 module.exports = {
     ACTIVE_LINEAR_REGRESSION_DATASET,

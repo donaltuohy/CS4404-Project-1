@@ -1,11 +1,12 @@
 const csv = require('csvtojson');
 
 const CONFIG = require('./config');
-const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
+// const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
+const DATASET = CONFIG.ACTIVE_KNN_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
  
- let readFromCsv = new Promise(function (resolve, reject) {
+let readFromCsv = new Promise(function (resolve, reject) {
   let csvData = [];
   csv({delimiter: DATASET.DELIMETER})
   .fromFile(DATASET.FILE_NAME)
@@ -21,7 +22,7 @@ const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 });
  
  
- function getSelectedFeatures(csvData) {
+function getSelectedFeatures(csvData) {
     const allFeatures = Object.keys(csvData[0]);
     let selectedFeatures = [];
     if(DATASET.OMIT_FEATURES) {
