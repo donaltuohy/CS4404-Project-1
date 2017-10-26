@@ -69,8 +69,8 @@ util.readFromCsv.then((readData) => {
   let averageMSE, averageMAE;
   if(TRAINING_PARAMS['SPLIT_METHOD'] === 'KFOLD') {
     const kFoldMSE = [], kFoldMAE = [];
-    for(let i=0; i<TRAINING_PARAMS['NUM_SPLITS']; i++) {
-      const { xTrain, yTrain, xTest, yTest } = util.splitKFoldCrossVal(X, y, TRAINING_PARAMS['NUM_SPLITS'], i);
+    for(let i=0; i<TRAINING_PARAMS['NUM_FOLDS']; i++) {
+      const { xTrain, yTrain, xTest, yTest } = util.splitKFoldCrossVal(X, y, TRAINING_PARAMS['NUM_FOLDS'], i);
       console.log("Evaluation fold " + i + " - Training with X = [" + xTrain.length + "," + xTrain[0].length + "], y = [" + yTrain.length + "]");
       
       const weights = train(xTrain, yTrain);
