@@ -10,12 +10,12 @@ def trainModel(xtrain, ytrain, xtest, ytest):
     return accuracy
 
 data = readData()
-print("LOOOOOOOOOOOOOOOOOOKKKKKKKKKKKKKK: ", len(data))
 
 chunkSizes = [100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]
 averageAcc = [0,0,0,0,0,0,0,0,0]
 
 for j in range(len(chunkSizes)):
+    print("Starting learning with ", chunkSizes[j], " instances.")
     x = createDesignMatrix(data)
     y = createLabelVector(data)
     x, y = divideDataChunks(x, y, chunkSizes[j])
