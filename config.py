@@ -42,6 +42,16 @@ SUM_10K_WITHOUT_NOISE = dict(
     LABEL = "Target Class"
 )
 
+ # Dataset 4 - House Data
+HOUSE_DATA = dict(
+    FILE_NAME = "kc_house_data.csv",
+    DELIMETER = ",",
+    FEATURES = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
+    MAX_CHUNK = 20000,
+    OMIT_FEATURES = False,
+    LABEL = "price"
+)
+
 
 ###########################################
 ####                 KNN            #######
@@ -50,4 +60,4 @@ SUM_10K_WITHOUT_NOISE = dict(
 #HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
 #HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
-ACTIVE_DATASET = SUM_WITHOUT_NOISE
+ACTIVE_DATASET = HOUSE_DATA

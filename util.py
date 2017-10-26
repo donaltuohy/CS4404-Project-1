@@ -17,8 +17,8 @@ def divideDataChunks(x, y, size):
         b = np.array([None, None])
         return a,b
     else:
-        newX = x[size:,:]
-        newY = y[size:,:]
+        newX = x[:size:,:]
+        newY = y[:size:,:]
     return newX, newY
 
 # Prints Matrices in a nicer way

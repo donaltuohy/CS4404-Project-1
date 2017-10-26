@@ -22,7 +22,8 @@ for j in range(len(chunkSizes)):
     if x.any() == None:
         print("Dataset doesn't contain ", chunkSizes[j], " instances.")
     else:
-        if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):        
+        if(TRAINING_PARAMS['SPLIT_METHOD'] == "KFOLD"):   
+            print("Lenght of x : ", len(x))     
             acc = []
             numDataSplits = TRAINING_PARAMS['NUM_SPLITS']
             #print("Cross Validation used for splitting")
