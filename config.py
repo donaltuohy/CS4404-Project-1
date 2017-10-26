@@ -1,13 +1,13 @@
 TRAINING_PARAMS = dict(
     NORMALIZE_METHOD = "ZSCORE",            # How features should be normalized
     DESIRED_NUM_INSTANCES = 100000,           # Specify max number of instances (None uses all instances)
-    SPLIT_METHOD = "70/30",                 # One of "70/30" or "KFOLD"
+    SPLIT_METHOD = "KFOLD",                 # One of "70/30" or "KFOLD"
     NUM_SPLITS = 10,                        # K in K fold cross validation
     LEARNING_RATE = 0.1,                    # Stepsize for gradient descent
     TRAINING_EPOCHS = 100,                  # Number of iterations of gradient descent training
     
-    IS_KNN_LABEL_STRING = False,             # If predicted string categorical data, set to True
-    KNN_CLASS_THRESHOLD = 5000,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
+    IS_KNN_LABEL_STRING = True,             # If predicted string categorical data, set to True
+    KNN_CLASS_THRESHOLD = None,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
     K = 2                                   # Number of nearest neighbours to use
 )
 
@@ -68,13 +68,10 @@ SUM_10K_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
 
 
 HOUSE_DATA_KNN = dict(HOUSE_DATA)
-#HOUSE_DATA_KNN['FEATURES'] = ['price', 'bathrooms', 'sqft_living', 'sqft_lot', 'condition', 'grade', 'waterfront', 'view', 'sqft_above', 'sqft_basement']
-
-# Great results for house data > 90% accuracy
-HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode']
+HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode', 'condition']
 HOUSE_DATA_KNN['OMIT_FEATURES'] = True
-HOUSE_DATA_KNN['LABEL'] = "price"
+HOUSE_DATA_KNN['LABEL'] = "condition"
 
 
-ACTIVE_DATASET = HOUSE_DATA_KNN
+ACTIVE_DATASET = HOUSE_DATA
 
