@@ -23,6 +23,7 @@ util.readFromCsv.then((readData) => {
     const kFoldMSE = [], kFoldMAE = [];
     for(let i=0; i<TRAINING_PARAMS['NUM_SPLITS']; i++) {
       const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_SPLITS'], i);
+      // console.log(splitData);
       const pointsTrain = splitData.xTrain;
       const classesTrain = splitData.yTrain;
       const pointsTest = splitData.xTest;
@@ -34,23 +35,20 @@ util.readFromCsv.then((readData) => {
     }
 
 
-  } 
-  
-  else {
+  } else {
     const splitData = util.split7030(points, classes);
     const pointsTrain = splitData.xTrain;
     const classesTrain = splitData.yTrain;
     const pointsTest = splitData.xTest;
     const classesTest = splitData.yTest;
 
-    console.log("Evaluation with 70/30");
-    console.log("Training with pointsTrain = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classesTrain = [" + classesTrain.length + "]");
-    console.log(pointsTrain);
-    console.log(classesTrain);
-    const knn = new KNN(pointsTrain, classesTrain);
+    // console.log("Evaluation with 70/30");
+    // console.log("Training with pointsTrain = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classesTrain = [" + classesTrain.length + "]");
+    // console.log("Testing with pointsTest = [" + pointsTest.length + "," + pointsTest[0].length + "], classesTrain = [" + classesTest.length + "]");
+    const knn = new KNN(pointsTrain, classesTrain, {k: 2});
     const predictions = knn.predict(pointsTest);
+    console.log(predictions)
     
-    // console.log(predictions);
   }
 
 }).catch((err) => {

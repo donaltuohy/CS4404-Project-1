@@ -1,6 +1,6 @@
 const TRAINING_PARAMS = {
     NORMALIZE_METHOD: "ZSCORE",             // How features should be normalized
-    DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (null uses all instances)
+    DESIRED_NUM_INSTANCES: 10,          // Specify max number of instances (null uses all instances)
     SPLIT_METHOD: "70/30",                  // One of "70/30" or "10Fold".
     NUM_SPLITS: 10,
     LEARNING_RATE: 0.1,                     // Stepsize for gradient descent
@@ -37,7 +37,7 @@ const LINEAR_REGRESSION_DATASETS = {
     // Dataset 3 - 10k of SUM without noise (for faster debugging)
     SUM_10K_WITHOUT_NOISE: {
         FILE_NAME: "sum_10k_without_noise.csv",
-        DELIMETER: ";",
+        DELIMETER: ",",
         FEATURES: ["Instance", "Target", "Target Class"],
         OMIT_FEATURES: true,
         LABEL: "Target"
@@ -68,7 +68,7 @@ HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePric
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
 const SUM_10K_WITHOUT_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_10K_WITHOUT_NOISE'])
-SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Noisy Target Class"
+SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target"
 
 const KNN_DATASETS = {
     SUM_WITH_NOISE_KNN,
