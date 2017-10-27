@@ -62,6 +62,7 @@ def splitData7030(X, y):
     yTest = y[numTrainInstances:]
     return xTrain, yTrain, xTest, yTest
 
+# Splits up fata according to the number of folds, and the current fold index
 def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
     testSetSize = round(X.shape[0] / splitFactor)
     startTestIndex =  crossValIndex * testSetSize
@@ -90,3 +91,12 @@ def featureNormalize(dataset):
         sigma = np.std(dataset,axis=0)
         print("Using Z-Score Normalization")
         return (dataset-mu)/sigma
+
+
+def multiclassToBinaryClass(labelVector, threshold):
+    for i, label in enumerate(labelVector):
+        if (label <= threshold):
+            labelVector[i][0] = 0
+        else:
+            labelVector[i][0] = 1
+    return labelVector

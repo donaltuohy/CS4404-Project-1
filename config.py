@@ -6,7 +6,7 @@ TRAINING_PARAMS = dict(
     LEARNING_RATE = 0.1,                    # Stepsize for gradient descent
     TRAINING_EPOCHS = 100,                  # Number of iterations of gradient descent training
     
-    IS_KNN_LABEL_STRING = True,             # If predicted string categorical data, set to True
+    IS_KNN_LABEL_STRING = False,             # If predicted string categorical data, set to True
     KNN_CLASS_THRESHOLD = None,             # The accepted deviation from true y value for numeric classification                                # Can be None for exact classification
     K = 2                                   # Number of nearest neighbours to use
 )
@@ -73,5 +73,5 @@ HOUSE_DATA_KNN['OMIT_FEATURES'] = True
 HOUSE_DATA_KNN['LABEL'] = "condition"
 
 
-ACTIVE_DATASET = HOUSE_DATA
+ACTIVE_DATASET = HOUSE_DATA_KNN
 
