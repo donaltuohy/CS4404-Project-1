@@ -8,8 +8,8 @@ Software
 ## SUM Data
 ### KNN (K=2)
 - 10 Fold Cross
-    - Accuracy:
-    -  
+    - Accuracy: 0.96346
+    - Precision: 0.981920305251
 - 70/30 Split
     - Accuracy: 0.9637666666666667
     - Precision: 0.9817939920173657
@@ -21,19 +21,14 @@ Software
     - MSE: 0.495185
     - MAE: 0.476312
 ### Random Forrest:
-- 10 Fold Cross
-    - Accuracy: 
-    - 
-- 70/30 Split: 
-    - Accuracy:
-    - 
+- NA
 
 
 ## House Data
 ### KNN (K=2)
 - 10 Fold Cross
-    - Accuracy:
-    -  
+    - Accuracy: 0.9268857010643221
+    - Precision: 0.446043131661
 - 70/30 Split
     - Accuracy: 0.7149907464528069
     - Precision: 0.4217016029593095
@@ -45,9 +40,4 @@ Software
     - MSE: 0.014584
     - MAE: 0.090220
 ### Random Forrest:
-- 10 Fold Cross
-    - Accuracy: 
-    - 
-- 70/30 Split: 
-    - Accuracy:
-    - 
+- NA

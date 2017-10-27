@@ -58,7 +58,7 @@ SUM_10K_WITH_NOISE = dict(
 ####                 KNN            #######
 ###########################################
 SUM_WITH_NOISE_KNN = dict(SUM_WITH_NOISE)
-SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target Class"
+SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
 
 SUM_10K_WITHOUT_NOISE_KNN = dict(SUM_10K_WITHOUT_NOISE)
 SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target"
@@ -73,5 +73,5 @@ HOUSE_DATA_KNN['OMIT_FEATURES'] = True
 HOUSE_DATA_KNN['LABEL'] = "condition"
 
 
-ACTIVE_DATASET = HOUSE_DATA_KNN
+ACTIVE_DATASET = SUM_WITH_NOISE_KNN
 
