@@ -52,10 +52,19 @@ HOUSE_DATA = dict(
     LABEL = "condition"
 )
 
+ # Dataset 4 - House Data (30+ features)
+NEWS_DATA = dict(
+    FILE_NAME = "OnlineNewsPopularity.csv",
+    DELIMETER = ",",
+    FEATURES = ["url", "timedelta", "data_channel_is_lifestyle"],
+    MAX_CHUNK = 39640,
+    OMIT_FEATURES = True,
+    LABEL = "data_channel_is_lifestyle"
+)
 
 ###########################################
 ####                 KNN            #######
 ###########################################
 
 
-ACTIVE_DATASET = HOUSE_DATA
+ACTIVE_DATASET = NEWS_DATA

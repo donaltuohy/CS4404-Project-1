@@ -22,6 +22,32 @@ Accuracy with  100000 is :  0.96477
 Accuracy with  500000 is :  -9999
 Accuracy with  1000000 is :  -9999
 
+KNN - HOUSE DATA - KFOLD
+
+Accuracy with  100 is :  0.54
+Accuracy with  500 is :  0.588
+Accuracy with  1000 is :  0.563
+Accuracy with  5000 is :  0.5648
+Accuracy with  10000 is :  0.5655
+Accuracy with  50000 is :  -9999
+Accuracy with  100000 is :  -9999
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
+
+KNN - NEWS_DATA - KFOLD
+
+Accuracy with  100 is :  0.86
+Accuracy with  500 is :  0.838
+Accuracy with  1000 is :  0.844
+Accuracy with  5000 is :  0.8368
+Accuracy with  10000 is :  0.8265
+Accuracy with  50000 is :  -9999
+Accuracy with  100000 is :  -9999
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
+
+------------------------------------------------------------------------------
+
 LOGISTIC REGRESSION - SUM WITHOUT NOISE - KFOLD
 
 Accuracy with  100 is :  0.89
@@ -43,5 +69,29 @@ Accuracy with  5000 is :  0.887
 Accuracy with  10000 is :  0.8868
 Accuracy with  50000 is :  0.88752
 Accuracy with  100000 is :  0.88762
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
+
+LOGISTIC REGRESSION - HOUSE DATA - KFOLD
+
+Accuracy with  100 is :  0.61
+Accuracy with  500 is :  0.61
+Accuracy with  1000 is :  0.61
+Accuracy with  5000 is :  0.6144
+Accuracy with  10000 is :  0.6189
+Accuracy with  50000 is :  -9999
+Accuracy with  100000 is :  -9999
+Accuracy with  500000 is :  -9999
+Accuracy with  1000000 is :  -9999
+
+LOGISTIC REGRESSION - NEWS DATA - KFOLD
+
+Accuracy with  100 is :  0.89
+Accuracy with  500 is :  0.916
+Accuracy with  1000 is :  0.846
+Accuracy with  5000 is :  0.9122
+Accuracy with  10000 is :  0.9263
+Accuracy with  50000 is :  -9999
+Accuracy with  100000 is :  -9999
 Accuracy with  500000 is :  -9999
 Accuracy with  1000000 is :  -9999
