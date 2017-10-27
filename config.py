@@ -56,8 +56,10 @@ HOUSE_DATA = dict(
 ###########################################
 ####                 KNN            #######
 ###########################################
-#HOUSE_DATA_KNN = dict(HOUSE_DATA)
-#HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePrice", "GrLivArea", "FullBath"]
-#HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 
-ACTIVE_DATASET = HOUSE_DATA
+HOUSE_DATA_KNN = dict(HOUSE_DATA)
+HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode', 'condition']
+HOUSE_DATA_KNN['OMIT_FEATURES'] = True
+HOUSE_DATA_KNN['LABEL'] = "condition"
+
+ACTIVE_DATASET = SUM_WITHOUT_NOISE
