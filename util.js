@@ -5,6 +5,9 @@ const DATASET = CONFIG.ACTIVE_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
  
+/*
+  Reads in data from file specified by ACTIVE_DATASET (config.js)
+*/
 let readFromCsv = new Promise(function (resolve, reject) {
   let csvData = [];
   console.log("Reading " + DATASET.FILE_NAME)
@@ -21,7 +24,9 @@ let readFromCsv = new Promise(function (resolve, reject) {
   });
 });
  
- 
+/*
+  Gets desired features as specified in ACTIVE_DATASET (config.js)
+*/
 function getSelectedFeatures(csvData) {
     const allFeatures = Object.keys(csvData[0]);
     let selectedFeatures = [];
@@ -35,6 +40,9 @@ function getSelectedFeatures(csvData) {
     return selectedFeatures;
 }
 
+/*
+  Allow for a smaller number of instances than what are in file
+*/
 function getDesiredNumberOfInstances(csvData) {
   if(TRAINING_PARAMS['DESIRED_NUM_INSTANCES']) {
     return Math.min(csvData.length, TRAINING_PARAMS['DESIRED_NUM_INSTANCES']);
@@ -43,6 +51,9 @@ function getDesiredNumberOfInstances(csvData) {
   return csvData.length;
 }
 
+/*
+  Builds standard design matrix from desired features
+*/
 function createDesignMatrix(csvData) {
   let selectedFeatures = getSelectedFeatures(csvData);
   let designMatrix = [];
@@ -60,6 +71,10 @@ function createDesignMatrix(csvData) {
   return designMatrix;
 }
 
+
+/*
+  Creates output array of arrays (for library compatability)
+*/
 function createLabelVector(csvData) {
   let labelVector = [];
   const maxNumInstances = getDesiredNumberOfInstances(csvData);
@@ -76,6 +91,10 @@ function createLabelVector(csvData) {
   return labelVector;   // remove empty first element
 }
 
+
+/*
+  Applies Z score transformation to a matrix
+*/
 function standardizeData(matrix) {
   const numColumns = matrix[0].length;
   const colVectors = getColumnVectorsFromMatrix(matrix);
@@ -104,6 +123,10 @@ function standardizeData(matrix) {
 
 }
 
+
+/*
+  Returns an array of columns contained in a matrix
+*/
 function getColumnVectorsFromMatrix(matrix) {
   let colVectors = [];
   for(let columnIndex=0; columnIndex<matrix[0].length; columnIndex++) {
@@ -114,6 +137,9 @@ function getColumnVectorsFromMatrix(matrix) {
 }
 
 
+/*
+  Splits X and y into xTrain, yTrain, xTest, yTest in a 7:3 ratio
+*/
 function split7030(X, y) {
   let numTrainInstances = Math.round(X.length*0.7);
 
@@ -125,6 +151,12 @@ function split7030(X, y) {
   }
 }
 
+
+/*
+  Splits train/test data in a ratio specified by split factor
+  Crossval index allows the test data to start at any multiple of split factor 
+  from the begining of the dataset
+*/
 function splitKFoldCrossVal(X, y, splitFactor, crossValIndex=0) {
     testSetSize = Math.round(X.length / splitFactor);
     startTestIndex = crossValIndex * testSetSize;
@@ -149,6 +181,9 @@ function splitKFoldCrossVal(X, y, splitFactor, crossValIndex=0) {
     }
 }
 
+/*
+  Computes mean of a vector
+*/
 function getMeanOfVector(vector) {
   let cumulativeSum = 0;
   vector.forEach(element => {
@@ -156,6 +191,60 @@ function getMeanOfVector(vector) {
   })
 
   return cumulativeSum / vector.length;
+}
+
+/*
+  Converts a multi classification set into a binary classification by using the specified threshold
+*/
+function multiClasstoBinaryClass(labelVector, threshold) {
+  for(let i=0; i<labelVector.length; i++) {
+    if(labelVector[i] <= threshold) {
+      labelVector[i] = 0;
+    } else {
+      labelVector[i] = 1
+    }
+  }
+
+  return labelVector;
+}
+
+/*
+  Returns an object representation of the confusion matrix
+*/
+function createConfusionMatrix(predicted, actual) {
+  let truePositives = 0, falsePositves = 0, trueNegatives = 0, falseNegatives = 0;
+  for(let i=0; i<predicted.length; i++) {
+    let predictedValue = predicted[i];
+    let wasCorrect = predictedValue === actual[i];
+    
+    if(wasCorrect && predictedValue === 1) {
+      truePositives ++;
+    } else if(wasCorrect && predictedValue === 0) {
+      trueNegatives ++;
+    } else if(!wasCorrect && predictedValue === 1) {
+      falseNegatives++;
+    } else {
+      falsePositves++;
+    }
+  }
+  
+  return {
+    truePositives,
+    trueNegatives,
+    falsePositves,
+    falseNegatives
+  }
+}
+
+/*
+  Computes accuracy and precission for a given set of test results
+*/
+function getClassificationMetrics(predicted, actual) {
+  const { truePositives, trueNegatives, falsePositves, falseNegatives } = createConfusionMatrix(predicted, actual);
+  return {
+    accuracy: (truePositives + trueNegatives) / (truePositives + trueNegatives + falsePositves + falseNegatives),
+    precision: (truePositives) / ((truePositives + falsePositves))
+  }
 }
 
 module.exports = {
@@ -168,5 +257,7 @@ module.exports = {
     getColumnVectorsFromMatrix,
     split7030,
     splitKFoldCrossVal,
-    getMeanOfVector
+    getMeanOfVector,
+    multiClasstoBinaryClass,
+    getClassificationMetrics
 }

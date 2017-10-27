@@ -1,8 +1,7 @@
+const MLR = require( 'ml-regression-multivariate-linear');
+
 const CONFIG = require('./config');
 const util = require('./util');
-
-// const SLR = ml.SLR; // Simple Linear Regression
-const MLR = require( 'ml-regression-multivariate-linear');
 
 const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;

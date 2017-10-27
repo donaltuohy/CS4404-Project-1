@@ -27,16 +27,16 @@ function getDistinctClasses(vector) {
     }
   })
 
-  return distinct;
+  console.log(distinct);
+  return distinct.sort();
 }
 
 
 function indexClasses(vector) {
   const distinct =  getDistinctClasses(vector);
-  
   // Replace class data with index of class
   vector = vector.map(point => {
-      return distinct.indexOf(point[0]);
+    return distinct.indexOf(point);
   })
 
   return vector;
@@ -55,6 +55,17 @@ function getAccuracy(predictions, actual) {
   return parseFloat(numCorrect) / predictions.length
 }
 
+// Returns number of times an element is in an array
+function getNumOccurences(vector, val) {
+  let n = 0;
+  vector.forEach((elem) => {
+    if(elem === val) {
+      n ++;
+    }
+  })
+  
+  return n;
+}
 
 /*
   Main function
@@ -62,50 +73,76 @@ function getAccuracy(predictions, actual) {
 util.readFromCsv.then((readData) => {
   let points = util.createDesignMatrix(readData);
   let classes = util.createLabelVector(readData);
-  classes = indexClasses(classes);
+  const mean = util.getMeanOfVector(classes.map(elem => {return elem[0]}))
 
-  let accuracy;
+  // Convert classes into indexs 
+  classes = util.multiClasstoBinaryClass(classes, mean)
+  classes = indexClasses(classes)
+ 
+  let accuracy, precission;
   if(TRAINING_PARAMS['SPLIT_METHOD'] === 'KFOLD') {
-    const accuracies = [];
+    const accuracies = [], precisions = [];
     for(let i=0; i<TRAINING_PARAMS['NUM_FOLDS']; i++) {
+      // Partition the data
       const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_FOLDS'], i);
       const pointsTrain = splitData.xTrain;
       const classesTrain = splitData.yTrain;
       const pointsTest = splitData.xTest;
       const classesTest = splitData.yTest;
+
+      // Train the model
+      console.log("Training Fold ", i);
       const classifier = new RFClassifier();
       classifier.train(pointsTrain, classesTrain);
       
+      // Predict Test values
+      console.log("Predicting fold ", i);
       const predictions = classifier.predict(pointsTest);
-      currentAccuracy = getAccuracy(predictions, classesTest);
-      console.log("Evaluation fold " + i + ": Accuracy = " + currentAccuracy);
-      
-      accuracies.push(currentAccuracy)
+
+      // Compute the metrics for this fold
+      const foldMetrics = util.getClassificationMetrics(predictions, classesTest);
+      console.log("Predicte 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
+      console.log("Predicte 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
+      console.log("Fold ", i, " evaluation: Accuracy: ", foldMetrics.accuracy, ", Precision: ", foldMetrics.precision, "\n")
+      accuracies.push(foldMetrics.accuracy);
+      precisions.push(foldMetrics.precision);
     
     }
 
+    // Compute mean metrics accross folds
     accuracy = util.getMeanOfVector(accuracies);
+    console.log(precisions)
+    precision = util.getMeanOfVector(precisions);
   } 
   
   else {
+    // PArtition the data
     const splitData = util.split7030(points, classes);
     const pointsTrain = splitData.xTrain;
     let classesTrain = splitData.yTrain;
     const pointsTest = splitData.xTest;
     let classesTest = splitData.yTest;
 
-    console.log("Evaluation with 70/30");
-    console.log("Training with pointsTrain = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classesTrain = [" + classesTrain.length + "]");
+    // Train the model
+    console.log("Training with 70/30");
+    console.log("Training 0s : ", getNumOccurences(classesTrain, 0))
+    console.log("Training 1s : ", getNumOccurences(classesTrain, 1))
     const classifier = new RFClassifier();
     classifier.train(pointsTrain, classesTrain);
-    console.log("Finished Training");
 
-    
+    // Predict the model
+    console.log("Predicting..")
     const predictions = classifier.predict(pointsTest);
-    accuracy = getAccuracy(predictions, classesTest)  
+    console.log("Predicte 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
+    console.log("Predicte 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
+
+    // Evaluate metrics
+    const metrics = util.getClassificationMetrics(predictions, classesTest);  
+    accuracy = metrics.accuracy;
+    precission = metrics.precision;
   }
 
-console.log(accuracy)
+console.log("Accuracy: ", accuracy, ", Precision: ", precission);
 
 }).catch((err) => {
     console.log(err);
