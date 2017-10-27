@@ -6,7 +6,6 @@ var predictions = IrisDataset.getClasses().map(
     (elem) => IrisDataset.getDistinctClasses().indexOf(elem)
 );
  
-console.log(IrisDataset.getClasses())
 
 var options = {
     seed: 3,

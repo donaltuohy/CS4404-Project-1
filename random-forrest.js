@@ -10,7 +10,18 @@ const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
 function getDistinctClasses(vector) {
   let distinct = [];
-  vector.forEach(element => {
+  let extracted;
+  // Extract data if it is a list of lists
+  if(vector[0].length) {
+    extracted = vector.map(elem => {
+      return elem[0];
+    })
+  } else {
+    extracted = vector;
+  }
+
+  // Find distinct elements
+  extracted.forEach(element => { 
     if(!distinct.includes(element)) {
       distinct.push(element);
     }
@@ -19,29 +30,61 @@ function getDistinctClasses(vector) {
   return distinct;
 }
 
+
+function indexClasses(vector) {
+  const distinct =  getDistinctClasses(vector);
+  
+  // Replace class data with index of class
+  vector = vector.map(point => {
+      return distinct.indexOf(point[0]);
+  })
+
+  return vector;
+}
+
+
+function getAccuracy(predictions, actual) {
+  let numCorrect = 0;
+
+  for(let i=0; i<predictions.length; i++) {
+    if(predictions[i] === actual[i]) {
+      numCorrect ++;
+    }
+  }
+
+  return parseFloat(numCorrect) / predictions.length
+}
+
+
 /*
   Main function
 */
 util.readFromCsv.then((readData) => {
   let points = util.createDesignMatrix(readData);
   let classes = util.createLabelVector(readData);
+  classes = indexClasses(classes);
 
-  let averageMSE, averageMAE;
+  let accuracy;
   if(TRAINING_PARAMS['SPLIT_METHOD'] === 'KFOLD') {
-    const kFoldMSE = [], kFoldMAE = [];
-    for(let i=0; i<TRAINING_PARAMS['NUM_SPLITS']; i++) {
-      const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_SPLITS'], i);
+    const accuracies = [];
+    for(let i=0; i<TRAINING_PARAMS['NUM_FOLDS']; i++) {
+      const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_FOLDS'], i);
       const pointsTrain = splitData.xTrain;
       const classesTrain = splitData.yTrain;
       const pointsTest = splitData.xTest;
       const classesTest = splitData.yTest;
+      const classifier = new RFClassifier();
+      classifier.train(pointsTrain, classesTrain);
       
-      console.log("Evaluation fold " + i + " - Training with points = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classes = [" + classesTrain.length + "]");
+      const predictions = classifier.predict(pointsTest);
+      currentAccuracy = getAccuracy(predictions, classesTest);
+      console.log("Evaluation fold " + i + ": Accuracy = " + currentAccuracy);
       
+      accuracies.push(currentAccuracy)
     
     }
 
-
+    accuracy = util.getMeanOfVector(accuracies);
   } 
   
   else {
@@ -51,39 +94,18 @@ util.readFromCsv.then((readData) => {
     const pointsTest = splitData.xTest;
     let classesTest = splitData.yTest;
 
-    const distinct =  getDistinctClasses(classesTrain);
-    classesTrain = classesTrain.map(point => {
-        return distinct.indexOf(point);
-    })
-
-    classesTest = classesTest.map(point => {
-        return distinct.indexOf(point);
-    })
-
-
-
     console.log("Evaluation with 70/30");
     console.log("Training with pointsTrain = [" + pointsTrain.length + "," + pointsTrain[0].length + "], classesTrain = [" + classesTrain.length + "]");
-
-
     const classifier = new RFClassifier();
     classifier.train(pointsTrain, classesTrain);
-
     console.log("Finished Training");
-    const predictions = classifier.predict(pointsTest);
 
-    let numCorrect = 0;
-
-    for(let i=0; i<predictions.length; i++) {
-      if(predictions[i] === classesTest[i]) {
-        numCorrect ++;
-      }
-    }
-
-    const accuracy = parseFloat(numCorrect) / predictions.length
-    console.log(accuracy)
     
+    const predictions = classifier.predict(pointsTest);
+    accuracy = getAccuracy(predictions, classesTest)  
   }
+
+console.log(accuracy)
 
 }).catch((err) => {
     console.log(err);

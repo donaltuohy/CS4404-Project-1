@@ -1,5 +1,4 @@
 const TRAINING_PARAMS = {
-    NORMALIZE_METHOD: "ZSCORE",             // How features should be normalized
     DESIRED_NUM_INSTANCES: 100000,          // Specify max number of instances (null uses all instances)
     SPLIT_METHOD: "70/30",                  // One of "70/30" or "KFOLD".
     NUM_FOLDS: 10,                          // Number of folds
@@ -17,73 +16,62 @@ If they are to be the features used for the inputs, set OMIT_FEATURES to False
 */
 
 
-const LINEAR_REGRESSION_DATASETS = {
-    // Dataset 1 - SUM with noise
-    SUM_WITH_NOISE: {
-        FILE_NAME: "sum_with_noise.csv",
-        DELIMETER: ";",
-        FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
-        OMIT_FEATURES: true,
-        LABEL: "Noisy Target"
-    },
-
-    // Dataset 2 - House Data
-    HOUSE_DATA: {
-        FILE_NAME: "kc_house_data.csv",
-        DELIMETER: ",",
-        FEATURES: ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
-        OMIT_FEATURES: false,
-        LABEL: "price"
-    },
-
-    // Dataset 3 - 10k of SUM without noise (for faster debugging)
-    SUM_10K_WITHOUT_NOISE: {
-        FILE_NAME: "sum_10k_without_noise.csv",
-        DELIMETER: ",",
-        FEATURES: ["Instance", "Target", "Target Class"],
-        OMIT_FEATURES: true,
-        LABEL: "Target"
-    },
-
-    // Dataset 4 - 10k of SUM without noise (for faster debugging)
-    SUM_10K_WITH_NOISE: {
-        FILE_NAME: "sum_10k_with_noise.csv",
-        DELIMETER: ";",
-        FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
-        OMIT_FEATURES: true,
-        LABEL: "Noisy Target"
-    },
+// Dataset 1 - SUM with noise
+const SUM_WITH_NOISE = {
+    FILE_NAME: "sum_with_noise.csv",
+    DELIMETER: ";",
+    FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
+    OMIT_FEATURES: true,
+    LABEL: "Noisy Target"
 };
 
-const ACTIVE_LINEAR_REGRESSION_DATASET = LINEAR_REGRESSION_DATASETS['HOUSE_DATA'];
+// Dataset 2 - House Data
+const HOUSE_DATA = {
+    FILE_NAME: "kc_house_data.csv",
+    DELIMETER: ",",
+    FEATURES: ["bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
+    OMIT_FEATURES: false,
+    LABEL: "price"
+};
 
+// Dataset 3 - 10k of SUM without noise (for faster debugging)
+const SUM_10K_WITHOUT_NOISE = {
+    FILE_NAME: "sum_10k_without_noise.csv",
+    DELIMETER: ",",
+    FEATURES: ["Instance", "Target", "Target Class"],
+    OMIT_FEATURES: true,
+    LABEL: "Target"
+};
+
+// Dataset 4 - 10k of SUM without noise (for faster debugging)
+// const SUM_10K_WITH_NOISE = {
+//     FILE_NAME: "sum_10k_with_noise.csv",
+//     DELIMETER: ";",
+//     FEATURES: ["Instance", "Noisy Target", "Noisy Target Class"],
+//     OMIT_FEATURES: true,
+//     LABEL: "Noisy Target"
+// };
 
 
 /******************************
     KNN
 *******************************/
-const SUM_WITH_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_WITH_NOISE'])
-SUM_WITH_NOISE_KNN['LABEL'] = "Noisy Target"
+const SUM_WITH_NOISE_CLASSIFICATION = Object.assign({}, SUM_WITH_NOISE)
+SUM_WITH_NOISE_CLASSIFICATION['LABEL'] = "Noisy Target Class"
 
-const HOUSE_DATA_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['HOUSE_DATA']);
-HOUSE_DATA_KNN['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode', 'condition']
-HOUSE_DATA_KNN['OMIT_FEATURES'] = true
-HOUSE_DATA_KNN['LABEL'] = "condition"
+const HOUSE_DATA_CLASSIFICATION = Object.assign({}, HOUSE_DATA);
+HOUSE_DATA_CLASSIFICATION['FEATURES'] = ['id', 'date', 'floors', 'yr_built', 'yr_renovated', 'zipcode', 'condition']
+HOUSE_DATA_CLASSIFICATION['OMIT_FEATURES'] = true
+HOUSE_DATA_CLASSIFICATION['LABEL'] = "condition"
 
 
-const SUM_10K_WITHOUT_NOISE_KNN = Object.assign({}, LINEAR_REGRESSION_DATASETS['SUM_10K_WITHOUT_NOISE'])
-SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = 'Target Class'
+const SUM_10K_WITHOUT_NOISE_CLASSIFICATION = Object.assign({}, SUM_10K_WITHOUT_NOISE)
+SUM_10K_WITHOUT_NOISE_CLASSIFICATION['LABEL'] = 'Target Class'
 
-const KNN_DATASETS = {
-    SUM_WITH_NOISE_KNN,
-    SUM_10K_WITHOUT_NOISE_KNN,
-    HOUSE_DATA_KNN
-};
 
-const ACTIVE_KNN_DATASET = SUM_10K_WITHOUT_NOISE_KNN;
+const ACTIVE_DATASET = SUM_10K_WITHOUT_NOISE_CLASSIFICATION;
 
 module.exports = {
-    ACTIVE_LINEAR_REGRESSION_DATASET,
-    ACTIVE_KNN_DATASET,
+    ACTIVE_DATASET,
     TRAINING_PARAMS
 }

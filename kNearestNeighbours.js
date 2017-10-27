@@ -3,7 +3,6 @@ const util = require('./util');
 
 const KNN = require( 'ml-knn');
 
-const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
 
@@ -12,12 +11,20 @@ const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 */
 function getAccuracy(predictions, actual) {
   const numElements = predictions.length;
+
   let numCorrect = 0;
   for(let i=0; i<numElements; i++) {
-    const difference = Math.abs(predictions[i] - actual[i]);
-    if(difference <= TRAINING_PARAMS['KNN_THRESHOLD']) {
-      numCorrect ++;
-    } 
+    if(typeof actual[i] === "string") {
+      if(actual[i] === predictions[i]) {
+        numCorrect ++;
+      }
+    } else {
+      const difference = Math.abs(predictions[i] - actual[i]);
+      if(difference <= TRAINING_PARAMS['KNN_THRESHOLD']) {
+        numCorrect ++;
+      } 
+    }
+
   }
 
   return numCorrect / parseFloat(numElements);
@@ -32,11 +39,12 @@ util.readFromCsv.then((readData) => {
   console.log("Running KNN: K = " + TRAINING_PARAMS['K'] + ", threshold = ", TRAINING_PARAMS['KNN_THRESHOLD'])
   let points = util.createDesignMatrix(readData);
   let classes = util.createLabelVector(readData);
-  
+  console.log("Starting Training")
   let accuracy;
   if(TRAINING_PARAMS['SPLIT_METHOD'] === 'KFOLD') {
     const accuracies = [];
     for(let i=0; i<TRAINING_PARAMS['NUM_FOLDS']; i++) {
+   
       const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_FOLDS'], i);
       const pointsTrain = splitData.xTrain;
       const classesTrain = splitData.yTrain;
@@ -45,6 +53,7 @@ util.readFromCsv.then((readData) => {
             
       const knn = new KNN(pointsTrain, classesTrain, {k: TRAINING_PARAMS['K']});
       const predictions = knn.predict(pointsTest);
+   
       const accuracy = getAccuracy(predictions, classesTest);
       console.log("Evaluation fold " + i + " - Accuracy: " + accuracy);
       accuracies.push(accuracy);
@@ -58,11 +67,10 @@ util.readFromCsv.then((readData) => {
     const classesTrain = splitData.yTrain;
     const pointsTest = splitData.xTest;
     const classesTest = splitData.yTest;
-
     console.log("Evaluation with 70/30");
+
     const knn = new KNN(pointsTrain, classesTrain, {k: TRAINING_PARAMS['K']});
     const predictions = knn.predict(pointsTest);
-
     accuracy = getAccuracy(predictions, classesTest);    
   }
 

@@ -1,13 +1,13 @@
 const csv = require('csvtojson');
 
 const CONFIG = require('./config');
-let DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
-DATASET = CONFIG.ACTIVE_KNN_DATASET;
+const DATASET = CONFIG.ACTIVE_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
  
 let readFromCsv = new Promise(function (resolve, reject) {
   let csvData = [];
+  console.log("Reading " + DATASET.FILE_NAME)
   csv({delimiter: DATASET.DELIMETER})
   .fromFile(DATASET.FILE_NAME)
   .on('json', (jsonObj) => {
@@ -63,7 +63,6 @@ function createDesignMatrix(csvData) {
 function createLabelVector(csvData) {
   let labelVector = [];
   const maxNumInstances = getDesiredNumberOfInstances(csvData);
-
   for(let i=0; i<maxNumInstances; i++) {
     const parsedFloat = parseFloat(csvData[i][DATASET.LABEL]);
     if(isNaN(parsedFloat)) {

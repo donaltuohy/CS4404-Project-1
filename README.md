@@ -15,17 +15,17 @@ Software
     -
 ### Linear Regression
 - 10 Fold Cross
-    - Accuracy: 
-    -  
+    - MSE: 0.014395112663261827
+    - MAE: 0.08982481454092239
 - 70/30 Split: 
-    - Accuracy:
-        -  
+    - MSE: 0.014393354668678969
+    - MAE: 0.08975348863578243
 ### Random Forrest:
 - 10 Fold Cross
-    - Accuracy: 
+    - Accuracy: 0.94 
     - 
 - 70/30 Split: 
-    - Accuracy:
+    - Accuracy: 0.95
     - 
 
 
@@ -39,15 +39,15 @@ Software
     -
 ### Linear Regression
 - 10 Fold Cross
-    - Accuracy: 
-    -  
+    - MSE: 0.49268474593999156
+    - MAE: 0.4639564068936849
 - 70/30 Split: 
-    - Accuracy:
-        -  
+    - MSE: 0.4952948146594092
+    - MAE: 0.4761043803001062
 ### Random Forrest:
 - 10 Fold Cross
-    - Accuracy: 
+    - Accuracy: 0.59
     - 
 - 70/30 Split: 
-    - Accuracy:
+    - Accuracy: 0.729
     - 
