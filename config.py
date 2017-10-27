@@ -19,7 +19,7 @@ SUM_WITH_NOISE = dict(
     DELIMETER = ";",
     FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Noisy Target Class"
+    LABEL = "Noisy Target"
 )
 
 # Dataset 2 - House Data
@@ -38,7 +38,7 @@ SUM_10K_WITHOUT_NOISE = dict(
     DELIMETER = ";",
     FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Target Class"
+    LABEL = "Target"
 )
 
 

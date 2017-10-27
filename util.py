@@ -103,3 +103,11 @@ def featureNormalize(dataset):
         sigma = np.std(dataset,axis=0)
         print("Using Z-Score Normalization with mean = ", mu, ", std dev = ", sigma)
         return (dataset-mu)/sigma
+
+def multiclassToBinary(labelVector, threshold):
+    for i, label in enumerate(labelVector):
+        if (label <= threshold):
+            labelVector[i][0] = 0
+        else:
+            labelVector[i][0] = 1
+    return labelVector
