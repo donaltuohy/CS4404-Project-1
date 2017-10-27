@@ -1,6 +1,6 @@
 TRAINING_PARAMS = dict(
     NORMALIZE_METHOD = "ZSCORE",             # How features should be normalized
-    DESIRED_NUM_INSTANCES = 10000000,          # Specify max number of instances (None uses all instances)
+    DESIRED_NUM_INSTANCES = 10000,          # Specify max number of instances (None uses all instances)
     SPLIT_METHOD = "70/30",                  # One of "70/30" or "10Fold"
     LEARNING_RATE = 0.1,                     # Stepsize for gradient descent
     TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
@@ -13,20 +13,20 @@ TRAINING_PARAMS = dict(
 
 # Dataset 1 - SUM with noise
 SUM_WITH_NOISE = dict(
-    FILE_NAME = "The SUM dataset, without noise.csv",
+    FILE_NAME = "The SUM dataset, with noise.csv",
     DELIMETER = ";",
-    FEATURES = ["Instance", "Target" ,"Target Class"],
+    FEATURES = ["Instance", "Noisy Target" ,"Noisy Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Target"
+    LABEL = "Noisy Target"
 )
 
 # Dataset 2 - House Data
 HOUSE_DATA = dict(
-    FILE_NAME = "housing_data.csv",
+    FILE_NAME = "kc_house_data.csv",
     DELIMETER = ",",
-    FEATURES = ["LotArea", "OverallQual", "OverallCond", "BedroomAbvGr"],
+    FEATURES = ["price", "bedrooms", "bathrooms", "sqft_living", "sqft_lot"],
     OMIT_FEATURES = False,
-    LABEL = "SalePrice"
+    LABEL = "price"
 )
 
 
@@ -76,4 +76,4 @@ HOUSE_DATA_KNN['FEATURES'] = ["LotArea", "OverallQual", "OverallCond", "SalePric
 HOUSE_DATA_KNN['LABEL'] = "BedroomAbvGr"
 """
 
-ACTIVE_DATASET = SUM_WITH_NOISE
+ACTIVE_DATASET = HOUSE_DATA

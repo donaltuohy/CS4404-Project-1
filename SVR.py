@@ -48,14 +48,13 @@ regressor.fit(xTrain,yTrain)
 #Preticting the Test set results
 y_pred = regressor.predict(xTest)
 
-#Mean square error
-from sklearn.metrics import mean_squared_error
-
-
-
+#RMSE and MAE for accuracy
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+mae = mean_absolute_error(y_true = yTest,y_pred = y_pred)
 rmse = mean_squared_error(y_pred,yTest)
 
-print(rmse)
+print('rmse : ' ,rmse)
+print('mae : ' ,mae)
 #reshape X to fit for Y
 """xTrain = xTrain[:,1]
 

@@ -53,10 +53,13 @@ xTrain = xTrain[:,1]
 y_pred = regressor.predict(xTest)
 
 #Mean square error
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+mae = mean_absolute_error(y_true = yTest,y_pred = y_pred)
 rmse = mean_squared_error(y_pred,yTest)
 
-
+print('rmse : ' ,rmse)
+print('mae : ' ,mae)
+"""
 
 #Visualising the Training Set results
 plt.scatter(xTrain, yTrain, color = "red")
@@ -70,4 +73,4 @@ plt.scatter(xTest, yTest, color = "red")
 plt.plot(xTrain, regressor.predict(xTest), color = "blue")
 plt.title("Area vs Value (test Set)")
 plt.xlabel("Area")
-plt.ylabel("Value")
+plt.ylabel("Value")"""
