@@ -1,8 +1,7 @@
-const CONFIG = require('./config');
-const util = require('./util');
-
 const KNN = require( 'ml-knn');
 
+const CONFIG = require('./config');
+const util = require('./util');
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
 
@@ -36,30 +35,37 @@ function getAccuracy(predictions, actual) {
   Main function
 */
 util.readFromCsv.then((readData) => {
-  console.log("Running KNN: K = " + TRAINING_PARAMS['K'] + ", threshold = ", TRAINING_PARAMS['KNN_THRESHOLD'])
+  console.log("Running KNN: K = " + TRAINING_PARAMS['K'])
   let points = util.createDesignMatrix(readData);
   let classes = util.createLabelVector(readData);
-  console.log("Starting Training")
+  classes = util.multiClasstoBinaryClass(classes, util.getMeanOfVector(classes.map(classAsArr => { return classAsArr[0] })));
+ 
+  console.log("Starting Evaluation")
   let accuracy;
   if(TRAINING_PARAMS['SPLIT_METHOD'] === 'KFOLD') {
-    const accuracies = [];
+    const accuracies = [], precisions = [];
     for(let i=0; i<TRAINING_PARAMS['NUM_FOLDS']; i++) {
-   
+      
+      // Partition the data
       const splitData = util.splitKFoldCrossVal(points, classes, TRAINING_PARAMS['NUM_FOLDS'], i);
       const pointsTrain = splitData.xTrain;
       const classesTrain = splitData.yTrain;
       const pointsTest = splitData.xTest;
       const classesTest = splitData.yTest;
             
+      // Predict 
       const knn = new KNN(pointsTrain, classesTrain, {k: TRAINING_PARAMS['K']});
+      console.log("Predicting ", i);
       const predictions = knn.predict(pointsTest);
    
-      const accuracy = getAccuracy(predictions, classesTest);
-      console.log("Evaluation fold " + i + " - Accuracy: " + accuracy);
-      accuracies.push(accuracy);
+      const foldMetrics = util.getClassificationMetrics(predictions, classesTest);
+      console.log("Fold " + i + " - Accuracy: " + foldMetrics.accuracy + ", Precision: " + foldMetrics.precision);
+      accuracies.push(foldMetrics.accuracy);
+      precisions.push(foldMetrics.precision)
     }
 
     accuracy = util.getMeanOfVector(accuracies);
+    precision = util.getMeanOfVector(precisions);
 
   } else {
     const splitData = util.split7030(points, classes);
@@ -71,10 +77,13 @@ util.readFromCsv.then((readData) => {
 
     const knn = new KNN(pointsTrain, classesTrain, {k: TRAINING_PARAMS['K']});
     const predictions = knn.predict(pointsTest);
-    accuracy = getAccuracy(predictions, classesTest);    
+    const metrics = util.getClassificationMetrics(predictions, classesTest); 
+      
+    accuracy = metrics.accuracy;
+    precision = metrics.precision;
   }
 
-  console.log("Average Accuracy: ", accuracy);
+  console.log("Accuracy: ", accuracy, ", Precision: ", precision);
 
 }).catch((err) => {
     console.log(err);
