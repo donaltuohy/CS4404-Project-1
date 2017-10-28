@@ -1,7 +1,6 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
-#import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 from pandas import *
@@ -40,6 +39,7 @@ def splitData7030(X, y):
         yTest = y[numTrainInstances:]
         return xTrain, yTrain, xTest, yTest
 
+# Returns x and y data split up for cross validation
 def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
     testSetSize = round(X.shape[0] / splitFactor)
     startTestIndex =  crossValIndex * testSetSize
@@ -54,7 +54,7 @@ def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
     yTrain = np.append(yTrain, np.array(y[startTestIndex+testSetSize:]), axis=0)
     return xTrain, yTrain, xTest, yTest
 
-# Builds the design matrix X inlcuding a column vector of 1s for the bias terms
+# Builds the design matrix X
 def createDesignMatrix(dataset):
     if(ACTIVE_DATASET['OMIT_FEATURES']):
         numDesignMatrixFeatures = len(dataset[0]) - len(ACTIVE_DATASET['FEATURES'])
@@ -79,17 +79,6 @@ def createLabelVector(dataset):
     y = np.transpose(np.matrix(dataset[ACTIVE_DATASET['LABEL']]))
     return y
 
-# Splits data according to chosen split method
-def splitData(X, y):
-    if(TRAINING_PARAMS['SPLIT_METHOD'] == "70/30"):
-        numTrainInstances = round(len(X)*0.7)
-        xTrain = X[:numTrainInstances, :]
-        yTrain = y[:numTrainInstances]
-        xTest = X[numTrainInstances:]
-        yTest = y[numTrainInstances:]
-        return xTrain, yTrain, xTest, yTest
-
-
 
 # Normalizes features to Standard Normal Variable or maps them over [0,1] range
 def featureNormalize(dataset):
@@ -104,6 +93,7 @@ def featureNormalize(dataset):
         print("Using Z-Score Normalization with mean = ", mu, ", std dev = ", sigma)
         return (dataset-mu)/sigma
 
+# Creates a binary classification from a multiclass
 def multiclassToBinary(labelVector, threshold):
     for i, label in enumerate(labelVector):
         if (label <= threshold):
