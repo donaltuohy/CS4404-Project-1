@@ -1,3 +1,4 @@
+# Silence Tensor Flowing optimization warning
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
@@ -53,7 +54,7 @@ def createLabelVector(dataset):
     y = np.transpose(np.matrix(dataset[ACTIVE_DATASET['LABEL']]))
     return y
 
-# Splits data according to chosen split method
+# Splits data according using a 70/30 split
 def splitData7030(X, y):
     numTrainInstances = round(len(X)*0.7)
     xTrain = X[:numTrainInstances, :]
@@ -62,7 +63,7 @@ def splitData7030(X, y):
     yTest = y[numTrainInstances:]
     return xTrain, yTrain, xTest, yTest
 
-# Splits up fata according to the number of folds, and the current fold index
+# Splits up data according to the number of folds, and the current fold index
 def splitUpDataCrossVal(X, y, splitFactor, crossValIndex=0):
     testSetSize = round(X.shape[0] / splitFactor)
     startTestIndex =  crossValIndex * testSetSize
@@ -92,7 +93,7 @@ def featureNormalize(dataset):
         print("Using Z-Score Normalization")
         return (dataset-mu)/sigma
 
-
+# Creates a binary classification from a multi classification
 def multiclassToBinaryClass(labelVector, threshold):
     for i, label in enumerate(labelVector):
         if (label <= threshold):

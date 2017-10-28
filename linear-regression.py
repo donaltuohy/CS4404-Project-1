@@ -1,10 +1,8 @@
-import util
-
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+import util
 
 # Prepends a column of ones to design matrix to represent bias term 
 def prependBiasTerm(dataset):
@@ -30,16 +28,6 @@ def evaluateModel(yTest, predictedY):
     return mse, mae
 
 
- # Plot some of the training data against input features
-def showPlots(X, y):
-    for i in range(1,X.shape[1]):
-        plt.plot(X[:,i], y, 'r+')
-        plt.xlabel("Feature %d" % i)
-        plt.ylabel(util.ACTIVE_DATASET['LABEL'])
-        plt.show()
-
-
-
 ###########################################
 ####     Begin Data Organization    #######
 ###########################################
@@ -48,12 +36,9 @@ data = util.readData()
 designMatrix = util.createDesignMatrix(data)
 labelVector = util.createLabelVector(data)
 
-
 designMatrix = util.featureNormalize(designMatrix)
 labelVector = util.featureNormalize(labelVector)
-
 designMatrix = prependBiasTerm(designMatrix)
-
 
 
 ###########################################
@@ -110,14 +95,6 @@ print("Average MSE: %4f" % averageMSE, ", Average MAE: %4f" % averageMAE)
 ###########################################
 ####         Evaluation             #######
 ###########################################
-# # Plot the cost function over time
-# plt.plot(range(len(lossFunctionHistory)), lossFunctionHistory, 'b+')
-# plt.xlabel("Epoch #")
-# plt.ylabel("Cost function")
-# plt.axis([0,util.TRAINING_PARAMS['TRAINING_EPOCHS'],0,np.max(lossFunctionHistory) + (0.1*np.max(lossFunctionHistory))])
-# plt.show()
-
-
 # Plot first feature against predicter / measured values
 plt.plot(xTest[:,1], yTest, 'ro')
 plt.plot(xTest[:,1], predictedY, 'bx')

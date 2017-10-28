@@ -66,5 +66,5 @@ SUM_10K_WITHOUT_NOISE_KNN['LABEL'] = "Target"
 # Select the dataset to be used by the algorithm
 # Be sure to sure to use the <>_KNN datasets when using K nearest neighbours 
 # then simply run `python <algorithm-script.py>` to get the results.
-ACTIVE_DATASET = SUM_WITH_NOISE_KNN
+ACTIVE_DATASET = HOUSE_DATA_KNN
 
