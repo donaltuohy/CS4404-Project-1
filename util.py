@@ -99,7 +99,39 @@ def splitData(X, y):
         yTest = y[numTrainInstances:]
         return xTrain, yTrain, xTest, yTest
 
+#Calculates the confusion matrix and then returns the value for precision
+def calculatePrecision(xtest, ytest, yPrediction):
+    truePositives = 0
+    falsePositives = 0
+    trueNegatives = 0
+    falseNegatives = 0
 
+    for i in range(len(xtest)):
+        if (yPrediction[i] == 0) and (ytest[i] == 0):
+            trueNegatives += 1
+        elif (yPrediction[i] == 0) and (ytest[i] == 1):
+            falseNegatives += 1
+        elif (yPrediction[i] == 1) and (ytest[i] == 1):
+            truePositives += 1
+        elif (yPrediction[i] == 1) and (ytest[i] == 0):
+            falsePositives += 1
+
+    print("TP: ",truePositives)
+    print("TN: ",trueNegatives)
+    print("FP: ",falsePositives)
+    print("FN: ",falseNegatives)
+    print("_____________")
+    #Return Precision
+    return truePositives/ (truePositives + falsePositives)
+    
+#Take in the metric arrays and print the results
+def printMetrics(chunkSizes,averageAcc, averagePre):        
+    for j in range(len(averageAcc)):
+        print("Accuracy with ", chunkSizes[j], "is : ", averageAcc[j])
+    print("_________________________")
+    for j in range(len(averagePre)):
+        print("Precision with ", chunkSizes[j], "is : ", averagePre[j])    
+       
 
 # Normalizes features to Standard Normal Variable or maps them over [0,1] range
 def featureNormalize(dataset):
@@ -113,3 +145,12 @@ def featureNormalize(dataset):
         sigma = np.std(dataset,axis=0)
         print("Using Z-Score Normalization with mean = ", mu, ", std dev = ", sigma)
         return (dataset-mu)/sigma
+
+# Takes a multiclass column matrix in and converts it to binary classification
+def multiclassToBinary(labelVector, threshold):
+    for i, label in enumerate(labelVector):
+        if (label <= threshold):
+            labelVector[i][0] = 0
+        else:
+            labelVector[i][0] = 1
+    return labelVector    

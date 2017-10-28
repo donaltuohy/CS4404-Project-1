@@ -1,7 +1,7 @@
 TRAINING_PARAMS = dict(
     NORMALIZE_METHOD = "ZSCORE",             # How features should be normalized
     DESIRED_NUM_INSTANCES = 1000000,          # Specify max number of instances (None uses all instances)
-    SPLIT_METHOD = "KFOLD",                  # One of "70/30" or "KFOLD"
+    SPLIT_METHOD = "70/30",                  # One of "70/30" or "KFOLD"
     NUM_SPLITS = 10,                         # K in K fold cross validation
     LEARNING_RATE = 0.1,                     # Stepsize for gradient descent
     TRAINING_EPOCHS = 100                    # Number of iterations of gradient descent training
@@ -19,7 +19,7 @@ SUM_WITH_NOISE = dict(
     MAX_CHUNK = 500000,
     FEATURES = ["Instance", "Noisy Target", "Noisy Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Noisy Target Class"
+    LABEL = "Noisy Target"
 )
 
 # Dataset 2 - SUM without noise
@@ -29,7 +29,7 @@ SUM_WITHOUT_NOISE = dict(
     MAX_CHUNK = 500000,
     FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Target Class"
+    LABEL = "Target"
 )
 
 # Dataset 3 - 10k of SUM without noise (for faster debugging)
@@ -39,27 +39,27 @@ SUM_10K_WITHOUT_NOISE = dict(
     MAX_CHUNK = 10000,
     FEATURES = ["Instance", "Target", "Target Class"],
     OMIT_FEATURES = True,
-    LABEL = "Target Class"
+    LABEL = "Target"
 )
 
  # Dataset 4 - House Data
 HOUSE_DATA = dict(
     FILE_NAME = "kc_house_data.csv",
     DELIMETER = ",",
-    FEATURES = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot", "price"],
+    FEATURES = ["bedrooms", "bathrooms", "sqft_living", "sqft_lot", "condition"],
     MAX_CHUNK = 20000,
     OMIT_FEATURES = False,
-    LABEL = "condition"
+    LABEL = "price"
 )
 
  # Dataset 4 - House Data (30+ features)
 NEWS_DATA = dict(
     FILE_NAME = "OnlineNewsPopularity.csv",
     DELIMETER = ",",
-    FEATURES = ["url", "timedelta", "data_channel_is_lifestyle"],
+    FEATURES = ["url", "timedelta", "average_token_length"],
     MAX_CHUNK = 39640,
     OMIT_FEATURES = True,
-    LABEL = "data_channel_is_lifestyle"
+    LABEL = "average_token_length"
 )
 
 ###########################################
