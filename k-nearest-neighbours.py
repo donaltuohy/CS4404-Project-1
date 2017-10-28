@@ -1,3 +1,7 @@
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
 from util import (
     readData, 
     createDesignMatrix, 
@@ -10,23 +14,8 @@ from util import (
 )
 from config import TRAINING_PARAMS
 
-import numpy as np
-import tensorflow as tf
-import matplotlib.pyplot as plt
-
-
-def plotFeatureAgainstClass(X, y):
-    class0 = [x for i, x in enumerate(X) if (y[i] == 0)]
-    class1 = [x for i, x in enumerate(X) if (y[i] == 1)]
-
-    class0X, class0Y = np.asarray(class0).T
-    class1X, class1Y = np.asarray(class1).T
-
-    plt.plot(class0X, class0Y, 'r+')
-    plt.plot(class1X, class1Y, 'bo')
-    plt.show()
-
-
+# Runs the model using the test points
+# Returns the resulting values contained in the confusion matrix
 def evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints, testClasses):
     sess.run(init)
     correctPredictions = 0
@@ -56,7 +45,7 @@ def evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints
             # Defines how close is close enough for numeric classifications
             knnThreshold = TRAINING_PARAMS['KNN_CLASS_THRESHOLD']
 
-            # Check if prediciton was correct
+            # Build the confusion matrix
             if (knnThreshold):
                 actual = testClasses[i]
                 if(abs(actual - prediction) <= knnThreshold):
@@ -73,7 +62,7 @@ def evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints
                     falseNegatives += 1
     return truePositives, falsePositives, trueNegatives, falseNegatives
         
-
+# Compute classification metrics of interest
 def getMetrics(truePositives, falsePositives, trueNegatives, falseNegatives):
     accuracy = (truePositives + trueNegatives) / (truePositives + trueNegatives + falsePositives + falseNegatives)
     recall = (truePositives / (truePositives + falseNegatives)) 
@@ -83,7 +72,7 @@ def getMetrics(truePositives, falsePositives, trueNegatives, falseNegatives):
     return accuracy, recall, precision, f1
 
 
-
+# Start of main program
 data = readData()
 points = createDesignMatrix(data)
 classes = createLabelVector(data)
@@ -92,7 +81,7 @@ numFeatures = points.shape[1]
 
 
 
-# tf Graph Input
+# Define Tensors
 allTrainingPoints = tf.placeholder("float", [None, numFeatures])
 currentTestPoint = tf.placeholder("float", [numFeatures])
 
@@ -104,7 +93,7 @@ distance = tf.negative(tf.reduce_sum(tf.abs(tf.subtract(currentTestPoint, allTra
 # Finds the top k nearest neighbours
 values,indicesOfKNN=tf.nn.top_k(distance,k=TRAINING_PARAMS['K'],sorted=False)
 
-correctPredictions = 0.
+# Initialize the networks variables
 init = tf.global_variables_initializer()
 
 # Evaluation
@@ -117,14 +106,18 @@ with tf.Session() as sess:
         f1s = []
         numFolds = TRAINING_PARAMS['NUM_SPLITS']
         for i in range(numFolds):
-            trainPoints, trainClasses, testPoints, testClasses = splitUpDataCrossVal(points, classes, numFolds, i)
-            truePositives, falsePositives, trueNegatives, falseNegatives = evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints, testClasses)
-            
             print("Evaluating Fold ", i)
+
+            # Split the data for for current fold
+            trainPoints, trainClasses, testPoints, testClasses = splitUpDataCrossVal(points, classes, numFolds, i)
+            
+            # Build the confusion matrix
+            truePositives, falsePositives, trueNegatives, falseNegatives = evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints, testClasses)           
             confustionMatrix = np.matrix([[trueNegatives, falseNegatives], [falsePositives, truePositives]])
             print("Confusion matrix:")
             printM(confustionMatrix)
 
+            # Compute the metrics
             accuracy, recall, precision, f1 = getMetrics(truePositives, falsePositives, trueNegatives, falseNegatives)
             accuracies.append(accuracy)
             recalls.append(recall)
@@ -132,19 +125,24 @@ with tf.Session() as sess:
             f1s.append(f1)
             print("Accuracy: ", accuracy, ", Recall: ", recall, ", Precission: ", precision, ", F1: ", f1, "\n")
         
+        # Find the average of the metrics across all folds
         accuracy = np.mean(accuracies)
         recall = np.mean(recalls)
         precision = np.mean(precisions)
         f1 = np.mean(f1)
     else:
         print("Evaluating using 70/30 split")
+
+        # Split the data
         trainPoints, trainClasses, testPoints, testClasses = splitData7030(points, classes)
+        
+        # Build the confusion matrix
         truePositives, falsePositives, trueNegatives, falseNegatives = evaluateTestPoints(sess, indicesOfKNN, trainPoints, trainClasses, testPoints, testClasses)
-       
         confustionMatrix = np.matrix([[trueNegatives, falseNegatives], [falsePositives, truePositives]])
         print("Confusion matrix: ")
         printM(confustionMatrix)
 
+        # Calculate the metrics
         accuracy, recall, precision, f1 = getMetrics(truePositives, falsePositives, trueNegatives, falseNegatives)
 
     print("Evaluation Completed - Mean Accuracy: ", accuracy, ", Mean Recall: ", recall, ", Mean Precission: ", precision, ", meanF1: ", f1)
