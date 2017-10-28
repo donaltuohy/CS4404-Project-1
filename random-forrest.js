@@ -1,13 +1,13 @@
+const IrisDataset = require('ml-dataset-iris');
+const RFClassifier = require('ml-random-forest').RandomForestClassifier;
+
+
 const CONFIG = require('./config');
 const util = require('./util');
-
-const IrisDataset = require('ml-dataset-iris');
-const RFClassifier = require('ml-random-forest').RandomForestClassifier;;
-
 const DATASET = CONFIG.ACTIVE_LINEAR_REGRESSION_DATASET;
 const TRAINING_PARAMS = CONFIG.TRAINING_PARAMS;
 
-
+// Returns all distinct elements in the classes vector
 function getDistinctClasses(vector) {
   let distinct = [];
   let extracted;
@@ -27,11 +27,10 @@ function getDistinctClasses(vector) {
     }
   })
 
-  console.log(distinct);
   return distinct.sort();
 }
 
-
+// Returns a vector of classes as indices instead of their numeric value
 function indexClasses(vector) {
   const distinct =  getDistinctClasses(vector);
   // Replace class data with index of class
@@ -42,18 +41,6 @@ function indexClasses(vector) {
   return vector;
 }
 
-
-function getAccuracy(predictions, actual) {
-  let numCorrect = 0;
-
-  for(let i=0; i<predictions.length; i++) {
-    if(predictions[i] === actual[i]) {
-      numCorrect ++;
-    }
-  }
-
-  return parseFloat(numCorrect) / predictions.length
-}
 
 // Returns number of times an element is in an array
 function getNumOccurences(vector, val) {
@@ -75,7 +62,7 @@ util.readFromCsv.then((readData) => {
   let classes = util.createLabelVector(readData);
   const mean = util.getMeanOfVector(classes.map(elem => {return elem[0]}))
 
-  // Convert classes into indexs 
+  // Convert classes into indices 
   classes = util.multiClasstoBinaryClass(classes, mean)
   classes = indexClasses(classes)
  
@@ -101,8 +88,8 @@ util.readFromCsv.then((readData) => {
 
       // Compute the metrics for this fold
       const foldMetrics = util.getClassificationMetrics(predictions, classesTest);
-      console.log("Predicte 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
-      console.log("Predicte 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
+      console.log("# Predicted 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
+      console.log("# Predicted 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
       console.log("Fold ", i, " evaluation: Accuracy: ", foldMetrics.accuracy, ", Precision: ", foldMetrics.precision, "\n")
       accuracies.push(foldMetrics.accuracy);
       precisions.push(foldMetrics.precision);
@@ -116,7 +103,7 @@ util.readFromCsv.then((readData) => {
   } 
   
   else {
-    // PArtition the data
+    // Partition the data
     const splitData = util.split7030(points, classes);
     const pointsTrain = splitData.xTrain;
     let classesTrain = splitData.yTrain;
@@ -133,8 +120,8 @@ util.readFromCsv.then((readData) => {
     // Predict the model
     console.log("Predicting..")
     const predictions = classifier.predict(pointsTest);
-    console.log("Predicte 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
-    console.log("Predicte 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
+    console.log("# Predicted 0 : ", getNumOccurences(predictions, 0), "Actual 0: ", getNumOccurences(classesTest, 0))
+    console.log("# Predicted 1 : ", getNumOccurences(predictions, 1), "Actual 1: ", getNumOccurences(classesTest, 1))
 
     // Evaluate metrics
     const metrics = util.getClassificationMetrics(predictions, classesTest);  
